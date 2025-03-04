@@ -5,7 +5,9 @@ using UnityEngine;
 public class Bbb10311031_PlayerAttack : MonoBehaviour
 {
 
+    public float attackTimeDelay = 1.5f;
     float attackTime = 0;
+    
 
     public float shakeDuration = 0.3f; // 흔들리는 지속 시간
     public float shakeMagnitude = 0.2f; // 흔들림 강도
@@ -23,11 +25,11 @@ public class Bbb10311031_PlayerAttack : MonoBehaviour
 
         attackTime += Time.deltaTime;
         // 마우스 클릭 시 이동 시작
-        if (Input.GetMouseButtonDown(0) && attackTime > 1.5f)
+        if (Input.GetMouseButtonDown(0) && attackTime > attackTimeDelay)
         {
             attackTime = 0;
             GameObject bullet1 = Instantiate(bullet, transform.position, Quaternion.identity);
-            bullet1.GetComponent<Bbb10311031_Canon>().targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            bullet1.GetComponent<Spear>().targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Bbb10311031_SoundManager.instance.PlaySFX("Canon");
             StartCoroutine(ShakeCamera());
         }
