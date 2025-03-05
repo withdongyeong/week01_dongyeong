@@ -18,18 +18,26 @@ public class Spear : MonoBehaviour
     private bool isMoving = false;
     private bool isReturn = false;
     private float reloadingTime;
+    private Bbb10311031_PlayerAttack _playerAttack;
+
 
     GameObject enemy;
     GameObject playerObj;
 
     Transform[] points = new Transform[2];
 
-    void Start()
+
+    private void Awake()
     {
         playerObj = GameObject.FindGameObjectWithTag("Player");
+        _playerAttack = playerObj.GetComponent<Bbb10311031_PlayerAttack>();
+    }
+
+    void Start()
+    {
         startPosition = transform.position;
         targetPosition = new Vector3(targetPosition.x, targetPosition.y, 0f); // 3D 좌표값 2D로 변경
-        returnSpeed = returnSpeed * StateManager.Instance.ReloadingTime();
+        returnSpeed = returnSpeed * StateManager.Instance.ReloadingTime(); // 돌아오는 속도
         SetTail();
 
         isMoving = true;
@@ -52,7 +60,7 @@ public class Spear : MonoBehaviour
             transform.up = (targetPosition - startPosition).normalized; // 작살 물체 방향
 
             // 이동
-            transform.position = Vector3.Lerp(transform.position, targetPosition,speed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, speed * Time.deltaTime);
 
             // 목적지 도착하면 멈춤
             if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
@@ -68,6 +76,7 @@ public class Spear : MonoBehaviour
                 }
                 isReturn = true; // 끝까지 도달했음
                 isMoving = false;
+                GetComponent<CapsuleCollider2D>().enabled = false;
                 //Destroy(gameObject);
             }
         }
@@ -81,6 +90,7 @@ public class Spear : MonoBehaviour
 
             if (Vector3.Distance(transform.position, playerObj.transform.position) < 0.1f)
             {
+                _playerAttack.AttackCountUp();
                 Destroy(gameObject);
             }
         }
@@ -88,28 +98,42 @@ public class Spear : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy")) // 적과 충돌하면
+        if (other.CompareTag("Enemy") && isMoving) // 적과 충돌하면
         {
-            enemy = other.gameObject;
+            Destroy(other.gameObject);
+            ReturnStart();
         }
-        if (other.CompareTag("Obstacle")) // 적과 충돌하면
+        if (other.CompareTag("Obstacle") && isMoving) // 장애물과 충돌하면
         {
-            isMoving = false;
-            isReturn = true;
+            ReturnStart();
         }
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (other.CompareTag("Enemy")) // 적과 충돌하면
+        if (collision.gameObject.CompareTag("Enemy") && isMoving) // 적과 충돌하면
         {
-            enemy = null;
+            Destroy(collision.gameObject);
+            ReturnStart();
+        }
+        if (collision.gameObject.CompareTag("Obstacle") && isMoving) // 장애물과 충돌하면
+        {
+            ReturnStart();
         }
     }
+    
     void SpearRotation()
     {
         Vector2 direction = transform.position - playerObj.transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+    }
+
+    // 돌아오기 시작할 때 충돌 판정 안나도록 설정
+    void ReturnStart()
+    {
+        isMoving = false;
+        isReturn = true;
+        GetComponent<CapsuleCollider2D>().enabled = false;
     }
 }
