@@ -62,9 +62,9 @@ public class StateManager : MonoBehaviour
         return _reloadingTime + (_relodaingUpgradeValue * _reloadUpgradeCount); // Spear.cs , isReturn 일때만 속도가 증가하도록 변경해야함 
     }
 
-    public void Addcoin(int coin)
+    public void CoinPlus()
     {
-        MyCoin += coin;
+        MyCoin ++ ;
     }
     public bool UseCoin(int coin)
     {
@@ -75,7 +75,6 @@ public class StateManager : MonoBehaviour
             if (shopUiManager != null) shopUiManager.UpdatePurchase();
             return true;
         }
-            //업그레이드 실패 메시지
             return false;
     }
 }

@@ -67,6 +67,7 @@ public class Spear : MonoBehaviour
             {
                 if (enemy != null)
                 {
+                    StateManager.Instance.CoinPlus();
                     Destroy(enemy);
                     //SoundManager.instance.PlaySFX("Clash");
                 }
