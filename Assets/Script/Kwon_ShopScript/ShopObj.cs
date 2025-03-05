@@ -13,7 +13,16 @@ public class ShopObj : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Spear")){
-
+            switch (characterState)
+            {
+                case UpgradeItem.SpearCount:
+                    break;
+                case UpgradeItem.ReroadingTime:
+                    break;
+                case UpgradeItem.Luck:
+                    break;
+                    
+            }
         }
     }
 }
