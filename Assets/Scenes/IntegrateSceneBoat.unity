@@ -1471,6 +1471,7 @@ MonoBehaviour:
   startUI: {fileID: 0}
   playUI: {fileID: 0}
   overUI: {fileID: 0}
+  RestartBtn: {fileID: 0}
   clearUI: {fileID: 0}
   gameTime: {fileID: 0}
   gameLevel: {fileID: 0}
@@ -1750,13 +1751,15 @@ MonoBehaviour:
   minDistance: 0.5
   screenArea: {x: 0, y: 0}
   areaCollider: {fileID: 600620124}
-  IslandPrefabArray:
+  islandPrefabArray:
   - {fileID: 3577383189568905669, guid: 51c5f3b92d2db7540b6370d31bc4f75e, type: 3}
   - {fileID: 1413141092216774962, guid: 242be2352a7a0de42b1c5d702d78a11c, type: 3}
   - {fileID: 55875378809720714, guid: caf23c8cc3efe174aab835fe04c65a1e, type: 3}
   - {fileID: 7999418950963405836, guid: 53661b66d5be3474a954acd77b458cd0, type: 3}
   - {fileID: 8480138585967245939, guid: d62ad5da20d0ab74baeb32adc40ae4ef, type: 3}
   spawnTornadoCount: 2
+  tornadoPrefab: {fileID: 2241344920595703642, guid: 0bc32da812893fd47945703f372e0fce, type: 3}
+  tornadoSpawnInterval: 15
 --- !u!4 &968767479
 Transform:
   m_ObjectHideFlags: 0
@@ -2566,7 +2569,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SpearCount>k__BackingField: 0
   <MyCoin>k__BackingField: 10
-  <LuckLevel>k__BackingField: 0
 --- !u!4 &1847807619
 Transform:
   m_ObjectHideFlags: 0

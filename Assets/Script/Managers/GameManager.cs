@@ -83,8 +83,6 @@ public class GameManager : MonoBehaviour
         isStartGame = false;
         isboss = false;
 
-        playerObject = GameObject.FindGameObjectWithTag("Player");
-
         spawnIntervalCorouineList = new List<Coroutine>();
 
         // 이전의 코루틴들이 존재할 시, 멈추고 비우기
@@ -163,6 +161,7 @@ public class GameManager : MonoBehaviour
     // 보스전 시작
     public void BossStart()
     {
+        playerObject = GameObject.FindGameObjectWithTag("Player");
         playerObject.transform.Find("Whale").gameObject.SetActive(false);
 
         //  보스 UI 활성화
