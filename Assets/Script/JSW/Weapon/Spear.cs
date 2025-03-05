@@ -93,6 +93,11 @@ public class Spear : MonoBehaviour
         {
             enemy = other.gameObject;
         }
+        if (other.CompareTag("Island")) // 섬과 충돌하면
+        {
+            isReturn = true;
+            isMoving = false;
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
