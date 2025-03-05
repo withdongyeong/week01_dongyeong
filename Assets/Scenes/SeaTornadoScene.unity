@@ -249,6 +249,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -330,6 +331,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ef16634f89f9134695d37e15a4b69cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ScreenArea>k__BackingField: {x: 0, y: 0}
 --- !u!1 &786435058
 GameObject:
   m_ObjectHideFlags: 0
@@ -1445,11 +1459,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c495c56b12a545649bd2ef0dc5aa331a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDistance: 0.5
-  islandPrefab: {fileID: 6286608468155650920, guid: 993d5796918182e4f9ed271785ac0c5d, type: 3}
   spawnIslandCount: 3
-  areaCollider: {fileID: 863161314}
+  minDistance: 0.5
   screenArea: {x: 0, y: 0}
+  areaCollider: {fileID: 863161314}
   IslandPrefabArray:
   - {fileID: 3577383189568905669, guid: 51c5f3b92d2db7540b6370d31bc4f75e, type: 3}
   - {fileID: 1413141092216774962, guid: 242be2352a7a0de42b1c5d702d78a11c, type: 3}
