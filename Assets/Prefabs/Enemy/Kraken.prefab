@@ -5095,7 +5095,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.06366435, g: 0.18762697, b: 0.23270428, a: 1}
   m_FlipX: 0
@@ -5453,7 +5453,7 @@ GameObject:
   - component: {fileID: 2597694594377538}
   m_Layer: 8
   m_Name: Kraken
-  m_TagString: Enemy
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5467,7 +5467,7 @@ Transform:
   m_GameObject: {fileID: 6974489897007497795}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: -11.11, y: 1.81, z: -0.007445986}
+  m_LocalPosition: {x: -11.11, y: 1.81, z: 2.04}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5581,9 +5581,9 @@ MonoBehaviour:
   forceDuration: 0.5
   forceStrength: 15
   maxTentacleDistance: 5
-  minTentacleDistance: 2
   tentacleCooldown: 2
   fullCooldown: 5
+  tentacleProjectilePrefab: {fileID: 551101328120880779, guid: be0eeb0fc139a3c43bde66aefb67fd18, type: 3}
 --- !u!1 &7023723121646874060
 GameObject:
   m_ObjectHideFlags: 0
