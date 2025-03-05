@@ -176,7 +176,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7
 --- !u!61 &27398390
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -207,7 +207,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -249,6 +249,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -330,6 +331,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ef16634f89f9134695d37e15a4b69cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ScreenArea>k__BackingField: {x: 0, y: 0}
 --- !u!1 &786435058
 GameObject:
   m_ObjectHideFlags: 0
@@ -713,52 +727,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2241344920595703642, guid: 0bc32da812893fd47945703f372e0fce, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1078770553}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bc32da812893fd47945703f372e0fce, type: 3}
---- !u!1 &1078770552 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2241344920595703642, guid: 0bc32da812893fd47945703f372e0fce, type: 3}
-  m_PrefabInstance: {fileID: 1078770551}
-  m_PrefabAsset: {fileID: 0}
---- !u!58 &1078770553
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1078770552}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
 --- !u!1 &1210810614
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,7 +793,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -865,7 +835,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7
 --- !u!114 &1210810618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -930,10 +900,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6703768485715949249, guid: ffaf5a67f486a974fb8e63a06be65b67, type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 623461876204587582, guid: ffaf5a67f486a974fb8e63a06be65b67, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1716521268}
   m_SourcePrefab: {fileID: 100100000, guid: ffaf5a67f486a974fb8e63a06be65b67, type: 3}
 --- !u!1 &1517216552
 GameObject:
@@ -992,7 +969,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7
 --- !u!61 &1517216555
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1023,7 +1000,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1048,7 +1025,7 @@ Transform:
   m_GameObject: {fileID: 1517216552}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -8, z: 0}
+  m_LocalPosition: {x: 0, y: -7.5, z: 0}
   m_LocalScale: {x: 30, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1082,7 +1059,7 @@ Transform:
   m_GameObject: {fileID: 1568421267}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 8, z: 0}
+  m_LocalPosition: {x: 0, y: 7.5, z: 0}
   m_LocalScale: {x: 30, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1118,7 +1095,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1160,7 +1137,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7
 --- !u!114 &1568421271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1173,6 +1150,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd81d9076620702419b4f92212d8fbf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1716521262 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 623461876204587582, guid: ffaf5a67f486a974fb8e63a06be65b67, type: 3}
+  m_PrefabInstance: {fileID: 1481504461}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1716521268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716521262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a63a32d2b2f6264880d808e6911d330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attractionList: []
+  AttractionForce: 100
+  F: 9.81
 --- !u!1 &1872921521
 GameObject:
   m_ObjectHideFlags: 0
@@ -1184,7 +1181,7 @@ GameObject:
   - component: {fileID: 1872921523}
   - component: {fileID: 1872921522}
   m_Layer: 0
-  m_Name: Bbb10311031_SoundManager
+  m_Name: SoundManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1384,17 +1381,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c495c56b12a545649bd2ef0dc5aa331a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDistance: 0.5
-  islandPrefab: {fileID: 6286608468155650920, guid: 993d5796918182e4f9ed271785ac0c5d, type: 3}
   spawnIslandCount: 3
-  areaCollider: {fileID: 863161314}
+  minDistance: 0.5
   screenArea: {x: 0, y: 0}
+  areaCollider: {fileID: 863161314}
   IslandPrefabArray:
   - {fileID: 3577383189568905669, guid: 51c5f3b92d2db7540b6370d31bc4f75e, type: 3}
   - {fileID: 1413141092216774962, guid: 242be2352a7a0de42b1c5d702d78a11c, type: 3}
   - {fileID: 55875378809720714, guid: caf23c8cc3efe174aab835fe04c65a1e, type: 3}
   - {fileID: 7999418950963405836, guid: 53661b66d5be3474a954acd77b458cd0, type: 3}
   - {fileID: 8480138585967245939, guid: d62ad5da20d0ab74baeb32adc40ae4ef, type: 3}
+  spawnTornadoCount: 2
 --- !u!4 &2098370660
 Transform:
   m_ObjectHideFlags: 0
