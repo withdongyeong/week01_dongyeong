@@ -1,21 +1,26 @@
 using UnityEngine;
-using System.Collections; // 이 라인을 추가하세요.
+using System.Collections;
+using System.Collections.Generic;
 
 public class KrakenMove : MonoBehaviour
 {
     public Transform player; // 플레이어의 Transform
-    public Transform tentacle; // Tentacle (근접 공격을 위한 객체)
+    public List<Transform> tentacles; // 여러 다리 객체를 위한 리스트
 
-    public float speed = 3f; // 이동 속도
-    public float rotationSpeed = 2f; // 회전 속도
-    public float forceDuration = 0.5f; // 밀리 어택을 위한 힘이 지속되는 시간
-    public float forceStrength = 15f; // 밀리 어택의 힘
+    public float speed = 2f; // 이동 속도
 
-    public float maxTentacleDistance = 5f; // Tentacle이 플레이어를 향해 이동할 수 있는 최대 거리
-    public float minTentacleDistance = 2f; // Tentacle이 플레이어와 너무 가까운 경우, 다리가 본체를 따라 이동하도록 하는 최소 거리
+    public float forceDuration = 1f; // 밀리 어택을 위한 힘이 지속되는 시간
+    public float forceStrength = 20f; // 밀리 어택의 힘
 
-    private Rigidbody2D tentacleRb; // Tentacle의 Rigidbody2D
+    public float maxTentacleDistance = 4f; // Tentacle이 플레이어를 향해 이동할 수 있는 최대 거리
+
+    private List<Rigidbody2D> tentacleRbs = new List<Rigidbody2D>(); // 각 Tentacle의 Rigidbody2D
     private bool isAttacking = false; // 공격 상태 체크
+    private int currentTentacleIndex = 0; // 현재 공격할 다리의 인덱스
+    private bool isCooldown = false; // 전체 쿨타임 상태 체크
+
+    public float tentacleCooldown = 2f; // 각 다리 공격 쿨타임
+    public float fullCooldown = 5f; // 모든 다리 사용 후 전체 쿨타임
 
     void Start()
     {
@@ -28,18 +33,14 @@ public class KrakenMove : MonoBehaviour
             }
         }
 
-        // Tentacle을 찾고 초기화
-        if (tentacle == null)
+        // Tentacle 객체들을 찾고 초기화
+        foreach (Transform tentacleObj in tentacles)
         {
-            GameObject tentacleObj = GameObject.FindGameObjectWithTag("Tentacle");
             if (tentacleObj != null)
             {
-                tentacle = tentacleObj.transform;
+                tentacleRbs.Add(tentacleObj.GetComponent<Rigidbody2D>());
             }
         }
-
-        // 텐타클의 Rigidbody2D를 찾습니다.
-        tentacleRb = tentacle.GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -49,64 +50,59 @@ public class KrakenMove : MonoBehaviour
             // 플레이어와의 거리 계산
             float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
+            // 플레이어가 5f 거리보다 멀면 가까워지려고 이동
             if (distanceToPlayer > maxTentacleDistance)
             {
-                // 플레이어와 멀면 접근하고 본체 회전
                 Move();
             }
-            else if (distanceToPlayer < minTentacleDistance && !isAttacking)
+
+            // 플레이어와의 거리가 4.5f에서 5.5f 범위일 때 공격
+            else if (distanceToPlayer >= maxTentacleDistance - 0.5f && distanceToPlayer <= maxTentacleDistance + 0.5f && !isAttacking && !isCooldown)
             {
-                // 플레이어와 가까우면 밀리 어택
+                Debug.Log("공격");
                 StartCoroutine(MeleeAttack());
             }
         }
     }
 
-    // 플레이어가 멀리 있을 때 회전하며 접근
+    // 이동 처리
     private void Move()
     {
-        // 플레이어 방향
         Vector2 direction = (player.position - transform.position).normalized;
 
-        // 본체 회전 (회전 속도를 추가)
-        float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        float angle = Mathf.LerpAngle(transform.eulerAngles.z, targetAngle, rotationSpeed * Time.deltaTime);
-        transform.rotation = Quaternion.Euler(0, 0, angle);
-
-        // 방향으로 이동
+        // 플레이어 방향으로 이동
         transform.position += (Vector3)(direction * speed * Time.deltaTime);
 
-        // Tentacle도 플레이어를 향해 이동 (근접 공격용 객체)
-        if (tentacle != null)
+        // Tentacle도 플레이어를 향해 이동
+        foreach (Transform tentacle in tentacles)
         {
             Vector2 tentacleDirection = (player.position - tentacle.position).normalized;
             tentacle.position = Vector2.MoveTowards(tentacle.position, player.position, speed * Time.deltaTime);
-            
-            // 텐타클에 힘을 추가하여 플레이어를 향하게 만듬
-            ApplyTentacleForce(tentacleDirection);
         }
     }
 
     // 플레이어 방향으로 힘을 적용 (일시적으로)
-    private void ApplyTentacleForce(Vector2 direction)
+    private void ApplyTentacleForce(Transform tentacle, Vector2 direction)
     {
+        Rigidbody2D tentacleRb = tentacle.GetComponent<Rigidbody2D>();
         if (tentacleRb != null)
         {
             // 힘을 일시적으로 추가하고 일정 시간이 지나면 제거
-            StartCoroutine(ApplyForceTemporarily(direction));
+            StartCoroutine(ApplyForceTemporarily(tentacleRb, direction));
         }
     }
 
-    private IEnumerator ApplyForceTemporarily(Vector2 direction)
+    private IEnumerator ApplyForceTemporarily(Rigidbody2D tentacleRb, Vector2 direction)
     {
-        // 텐타클에 힘을 가합니다
+        // 텐타클에 플레이어 방향으로 힘을 가합니다
         tentacleRb.AddForce(direction * forceStrength, ForceMode2D.Impulse);
 
         // 일정 시간 동안 힘을 지속합니다
         yield return new WaitForSeconds(forceDuration);
 
-        // 힘을 제거하기 위해 리셋 (힘을 없애고 원래 상태로 돌아감)
-        tentacleRb.linearVelocity = Vector2.zero;  // 속도를 0으로 리셋
+        // 힘을 제거하고 플레이어 반대 방향으로 힘을 추가하여 회수
+        Vector2 reverseDirection = -direction;  // 플레이어의 반대 방향
+        tentacleRb.AddForce(reverseDirection * forceStrength, ForceMode2D.Impulse);
     }
 
     // 밀리 어택을 위한 근접 공격
@@ -114,20 +110,28 @@ public class KrakenMove : MonoBehaviour
     {
         isAttacking = true;
 
-        // 밀리 어택으로 텐타클에 힘을 주는 동작
-        Vector2 attackDirection = (player.position - tentacle.position).normalized;
-        ApplyTentacleForce(attackDirection);
+        // 공격할 다리 선택 (현재 다리부터 시작)
+        Transform tentacleToAttack = tentacles[currentTentacleIndex];
+        Rigidbody2D tentacleRb = tentacleToAttack.GetComponent<Rigidbody2D>();
 
-        // 잠시 후 공격 완료 상태로 돌아가기
-        yield return new WaitForSeconds(forceDuration);
+        // 밀리 어택으로 텐타클에 힘을 주는 동작
+        Vector2 attackDirection = (player.position - tentacleToAttack.position).normalized;
+        ApplyTentacleForce(tentacleToAttack, attackDirection);
+
+        // 공격 후 쿨타임을 기다림
+        yield return new WaitForSeconds(tentacleCooldown);
+
+        // 다음 다리로 공격 순서를 변경
+        currentTentacleIndex = (currentTentacleIndex + 1) % tentacles.Count;
 
         isAttacking = false;
 
-        // 공격 후 텐타클이 다시 플레이어를 향해 움직이도록 처리
-        if (tentacle != null)
+        // 모든 다리를 사용한 후 전체 쿨타임
+        if (currentTentacleIndex == 0 && !isCooldown)
         {
-            Vector2 tentacleDirection = (player.position - tentacle.position).normalized;
-            tentacle.position = Vector2.MoveTowards(tentacle.position, player.position, speed * Time.deltaTime);
+            isCooldown = true;
+            yield return new WaitForSeconds(fullCooldown);
+            isCooldown = false;
         }
     }
 }

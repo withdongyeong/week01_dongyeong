@@ -5572,11 +5572,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  tentacle: {fileID: 8151357604278108472}
+  tentacles:
+  - {fileID: 8151357604278108472}
+  - {fileID: 4071916278038009207}
+  - {fileID: 2016041008466715312}
+  - {fileID: 1370399448716897244}
   speed: 3
-  rotationSpeed: 0.5
+  forceDuration: 0.5
+  forceStrength: 15
   maxTentacleDistance: 5
   minTentacleDistance: 2
+  tentacleCooldown: 2
+  fullCooldown: 5
 --- !u!1 &7023723121646874060
 GameObject:
   m_ObjectHideFlags: 0
