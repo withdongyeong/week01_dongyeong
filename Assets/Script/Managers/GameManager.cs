@@ -128,6 +128,5 @@ public class GameManager : MonoBehaviour
     {
         isGameOver = true;
         // 보스 클리어 UI 활성화
-
     }
 }
