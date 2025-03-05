@@ -4,6 +4,7 @@ using UnityEngine;
 public abstract class Attraction : MonoBehaviour
 {
     CircleCollider2D _collider;
+    protected bool isExistPlayer = false; 
 
     void Start()
     {
@@ -23,6 +24,7 @@ public abstract class Attraction : MonoBehaviour
     {
         if (other.TryGetComponent(out ApplyAttractionObject gravityObject))
         {
+            isExistPlayer = true;
             gravityObject.AddGravityField(this);
         }
     }
@@ -32,6 +34,7 @@ public abstract class Attraction : MonoBehaviour
         if (other.TryGetComponent(out ApplyAttractionObject gravityObject))
         {
             gravityObject.RemoveGravityField(this);
+            isExistPlayer = false;
         }
     }
 
