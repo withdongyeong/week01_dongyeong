@@ -397,6 +397,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1565600984102356951, guid: dbecbf49e0f27ee44a63f824ffcae74a, type: 3}
+      propertyPath: bullet
+      value: 
+      objectReference: {fileID: 551101328120880779, guid: c45f17b34bed2a043b1720fa0f6598af, type: 3}
     - target: {fileID: 1577724585914340670, guid: dbecbf49e0f27ee44a63f824ffcae74a, type: 3}
       propertyPath: m_Name
       value: Boat
