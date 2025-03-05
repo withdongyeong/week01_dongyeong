@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
@@ -18,7 +20,8 @@ public class PlayerHealth : MonoBehaviour
 
     void Start()
     {
-        healthBarFill = UIManager.Instance.gameObject.transform.GetChild(1).GetChild(1).GetComponent<Image>();
+        if(SceneManager.GetActiveScene().name == "IntegrateScene")
+            healthBarFill = UIManager.Instance.gameObject.transform.GetChild(1).GetChild(1).GetComponent<Image>();
         originalPosition = Camera.main.transform.position; 
         currentHealth = maxHealth; // 시작할 때 최대 체력 설정
     }

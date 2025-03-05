@@ -9,16 +9,20 @@ public class GameManager : MonoBehaviour
     static GameManager _instance;
     public static GameManager Instance { get { return _instance; } private set { } }
 
-    [Header("������")]
+    [Header("컨텐츠")]
     public bool isGameOver;
-    public float playTime = 0;
+    public bool isGameClear;
+    public float playTime = 0;  // 플레이 시간
     public int Level = 1;
+    public int startTime = 5;
+    public bool isStartGame = false;
 
-    [Header("��ȯ")]
-    public GameObject enemySpawner;
-    public GameObject obstacleSpawner;
-    public GameObject cloudeSpawner;
-    public GameObject boss;
+    [Header("소환")]
+    public List<Transform> spawnTransformList = new List<Transform>();         // 프리팹 소환 장소 리스트,    0: 구름, 1: 상어, 2: 크라켄
+    public List<GameObject> spawnPrefabList = new List<GameObject>();          // 프리팹 리스트,              0: 구름, 1: 상어, 2: 크라켄
+    public List<Coroutine> spawnIntervalCorouineList; // 프리팹 소환 코루틴 리스트,  0: 구름, 1: 상어
+    public bool isboss;
+
     void Awake()
     {
         if (_instance == null)
@@ -27,9 +31,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
         else
-        {
             Destroy(gameObject);
-        }
     }
 
     void Start()
@@ -39,21 +41,26 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (isGameOver) return;
+        if (isGameOver)
+            return;
 
-        UpdateTimer();
+        if(SceneManager.GetActiveScene().name == "IntegrateScene")
+            UpdateTimer();
 
-        if (playTime > 60 && !isboss)
+        if (playTime > 15 && !isboss)
             BossStart();
 
-        if (playTime > 7) // 7�� �ʰ����� ���� ����
+        // 게임 시작
+        if (playTime > startTime && !isStartGame)
         {
+            isStartGame = true;
             GamePlaying();
         }
-        else if (playTime > 180)
+
+
+        if (playTime > 180)
         {
-            if (UIManager.Instance.IsReadyUI)
-                UIManager.Instance.UpdateGameClearUI();
+            UIManager.Instance.UpdateGameClearUI();
             return;
         }
     }
@@ -64,69 +71,114 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateTimeText((int)playTime);
     }
 
-    //public void StageLevelUp()
-    //{
-    //    Level += 1;
-    //    UIManager.Instance.UpdateLevelText(Level);
-    //    //enemySpawner.GetComponent<EnemySpawn>().spawnInterval -= 1f;
-    //}
-
-    // ���� ����
+    // 게임 시작
     public void GameStart()
     {
-        isboss = false;
         isGameOver = false;
+        isGameClear = false;
         playTime = 0;
-        UIManager.Instance.UpdateGameStartUI();
-        if (enemySpawner != null) enemySpawner.SetActive(false);
+        Level = 1;
+        startTime = 5;
+        isStartGame = false;
+        isboss = false;
+
+        spawnIntervalCorouineList = new List<Coroutine>();
+
+        // 이전의 코루틴들이 존재할 시, 멈추고 비우기
+        StopAllCoroutines();
+        //for (int i = 0; i < spawnIntervalCorouineList.Count; i++)
+        //    spawnIntervalCorouineList[i] = null;
+
+        // 구름 소환
+        if (spawnIntervalCorouineList.Count == 0)
+        {
+            spawnIntervalCorouineList.Add(StartCoroutine(SpawnIntervalPrefabCoroutine(spawnPrefabList[0], 10.0f)));
+
+            Debug.Log($"구름 코루틴 추가, 현재 코루틴 개수: {spawnIntervalCorouineList.Count}");
+        }
     }
 
-    // ���� �÷��� �� 
+    // 게임 플레이 중 
     public void GamePlaying()
     {
-        UIManager.Instance.EndGameStartUI();
-        if (enemySpawner != null) enemySpawner.SetActive(true);
+        // 게임 진행 UI로 전환
+        UIManager.Instance.UpdateGamePlayingUI();
+
+        // 상어 소환
+        if (spawnIntervalCorouineList.Count == 1)
+        {
+            spawnIntervalCorouineList.Add(StartCoroutine(SpawnIntervalPrefabCoroutine(spawnPrefabList[1], 2.0f)));
+
+            Debug.Log($"상어 코루틴 추가, 현재 코루틴 개수: {spawnIntervalCorouineList.Count}");
+        }
     }
 
 
-    // ���ӿ��� ���� ��
+    // 게임오버 됐을 때
     public void GameOver()
     {
-        UIManager.Instance.UpdateGameOverUI();
-        if (enemySpawner != null) enemySpawner.SetActive(false);
+        UIManager.Instance.UpdateGameOverUI(); // 게임 오버 UI 보이기
+
+        //if (enemySpawner != null) enemySpawner.SetActive(false);
         isGameOver = true;
     }
 
-    // ���� ������ �Ѿ
-    public void GoShop()
+    // 플레이 씬으로 넘어감
+    public void GoInGameScene()
     {
-        UIManager.Instance.UpdateGoShopUI();
-        SceneManager.LoadScene(1);
-    }
-
-    // �÷��̾����� �Ѿ
-    public void GoGame()
-    {
-        GameStart();
         SceneManager.LoadScene(0);
+        GameStart();
     }
 
-    bool isboss;
-    // ������ ����
+    // 상점 씬으로 넘어감
+    public void GoShopScene()
+    {
+        UIManager.Instance.UpdateGoShopUI();    // 인게임 UI 정리
+        SceneManager.LoadScene(1);              // 상점 씬으로 이동
+    }
+
+
+    #region 보스
+    // 보스전 시작
     public void BossStart()
     {
-        if (enemySpawner != null) enemySpawner.SetActive(false);
         UIManager.Instance.UpdateGamePlayingUI();
-        // ���� ����
 
-        Instantiate(boss);
+        // 상어 소환 중지
+        if (spawnIntervalCorouineList.Count >= 2)
+        {
+            StopCoroutine(spawnIntervalCorouineList[1]);
+            spawnIntervalCorouineList[1] = null;
+        }
+
+        // 크라켄 소환
         isboss = true;
+        Instantiate(spawnPrefabList[2]);
     }
 
-    // ���� Ŭ�����
+    // 보스 클리어시
     public void BossClear()
     {
         isGameOver = true;
-        // ���� Ŭ���� UI Ȱ��ȭ
+
+        //  UI 활성화
+        // (구현 예정)
+        Debug.Log("보스 클리어~");
+
+
+
+        Invoke("GoShopScene", 3f);
+    }
+    #endregion
+
+    // 일정 주기로 계속 프리팹 소환
+    IEnumerator SpawnIntervalPrefabCoroutine(GameObject prefab, float interval)
+    {
+        while (true)
+        {
+            int randomPosX = Random.Range(-7, 7);
+            Instantiate(prefab, new Vector3(randomPosX, 7, 0), Quaternion.identity);
+            yield return new WaitForSeconds(interval);
+        }
     }
 }

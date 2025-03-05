@@ -102,6 +102,11 @@ public class Spear : MonoBehaviour
         {
             Destroy(other.gameObject);
             ReturnStart();
+
+            // (임시)
+            if (other.GetComponent<KrakenMove>() != null)
+                GameManager.Instance.GoShopScene();
+
         }
         if (other.CompareTag("Obstacle") && isMoving) // 장애물과 충돌하면
         {

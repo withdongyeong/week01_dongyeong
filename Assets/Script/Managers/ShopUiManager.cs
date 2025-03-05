@@ -18,12 +18,12 @@ public class ShopUiManager : MonoBehaviour
     public void GoStart()
     {
         //SceneManager.LoadScene(0);
-        GameManager.Instance.GoGame();
+        GameManager.Instance.GoInGameScene();
     }
 
     public void UpdatePurchase()
     {
-        _myCoin = StateManager.Instance.GetCoin();
+        _myCoin = StateManager.Instance.MyCoin;
         coinCount.text = "Craken Leg : " + _myCoin.ToString();
     }
 }
