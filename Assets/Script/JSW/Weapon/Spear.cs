@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.LightTransport;
+using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 
 public class Spear : MonoBehaviour
@@ -7,7 +8,7 @@ public class Spear : MonoBehaviour
     public float speed = 6f; // 이동 속도
     public float returnSpeed = 3f;
     public Vector3 targetPosition; // 클릭한 위치
-    public Vector3 startPosition; // 시작 위치
+    public Vector3 startPosition; // 시작 위치 
 
     public float acceleration = 2f; // 가속도
     private float currentSpeed = 0f; // 현재 속도
@@ -16,6 +17,7 @@ public class Spear : MonoBehaviour
     private bool isMoving = false;
     private bool isReturn = false;
     private float journeyLength;
+    private float reloadingTime;
 
     float distanceCovered = 0f;
     float fractionOfJourney = 0f;
@@ -68,8 +70,9 @@ public class Spear : MonoBehaviour
             //transform.up = (targetPosition - playerObj.transform.position).normalized; // 작살 물체 반대방향 
             transform.position = Vector3.MoveTowards(transform.position, playerObj.transform.position, speed * Time.deltaTime);
 
-            currentSpeed += acceleration * Time.deltaTime; // 시간이 지날수록 속도 증가
+            currentSpeed += acceleration * reloadingTime * Time.deltaTime; // 시간이 지날수록 속도 증가
             transform.position = Vector3.MoveTowards(transform.position, playerObj.transform.position, currentSpeed * Time.deltaTime);
+            SpearRotation();
 
             if (Vector3.Distance(transform.position, playerObj.transform.position) < 0.1f)
             {
@@ -92,5 +95,11 @@ public class Spear : MonoBehaviour
         {
             enemy = null;
         }
+    }
+    void SpearRotation()
+    {
+        Vector2 direction = transform.position - playerObj.transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
     }
 }
