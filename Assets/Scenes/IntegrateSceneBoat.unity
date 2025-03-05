@@ -231,8 +231,9 @@ MonoBehaviour:
   playTime: 0
   Level: 1
   enemySpawner: {fileID: 2103769830}
-  obstacleSpawner: {fileID: 1370219872}
+  obstacleSpawner: {fileID: 0}
   cloudeSpawner: {fileID: 100482762}
+  boss: {fileID: 6974489897007497795, guid: b22b53c39099b8b41bd0cb6580931323, type: 3}
 --- !u!4 &76059816
 Transform:
   m_ObjectHideFlags: 0
@@ -2510,57 +2511,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1370219872
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1370219873}
-  - component: {fileID: 1370219874}
-  m_Layer: 0
-  m_Name: ObstacleSpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1370219873
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1370219872}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 7, z: -0.124768466}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1370219874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1370219872}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c2237228c8d5c247abd7c94ad6fd466, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObstaclePrefab:
-  - {fileID: 1413141092216774962, guid: 242be2352a7a0de42b1c5d702d78a11c, type: 3}
-  - {fileID: 55875378809720714, guid: caf23c8cc3efe174aab835fe04c65a1e, type: 3}
-  - {fileID: 7999418950963405836, guid: 53661b66d5be3474a954acd77b458cd0, type: 3}
-  - {fileID: 8480138585967245939, guid: d62ad5da20d0ab74baeb32adc40ae4ef, type: 3}
-  - {fileID: 3577383189568905669, guid: 51c5f3b92d2db7540b6370d31bc4f75e, type: 3}
-  spawnInterval: 7
 --- !u!1 &1420572909
 GameObject:
   m_ObjectHideFlags: 0
@@ -3642,7 +3592,6 @@ SceneRoots:
   - {fileID: 124150279}
   - {fileID: 100482764}
   - {fileID: 2103769831}
-  - {fileID: 1370219873}
   - {fileID: 2123547858}
   - {fileID: 169917251}
   - {fileID: 968767479}

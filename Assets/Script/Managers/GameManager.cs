@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public GameObject enemySpawner;
     public GameObject obstacleSpawner;
     public GameObject cloudeSpawner;
-
+    public GameObject boss;
     void Awake()
     {
         if (_instance == null)
@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
 
         UpdateTimer();
 
-        if (playTime > 60)
+        if (playTime > 60 && !isboss)
             BossStart();
 
         if (playTime > 7) // 7초 초과부터 게임 시작
@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
     // 게임 시작
     public void GameStart()
     {
+        isboss = false;
         isGameOver = false;
         if (enemySpawner != null) enemySpawner.SetActive(false);
     }
@@ -104,6 +105,7 @@ public class GameManager : MonoBehaviour
         GameStart();
     }
 
+    bool isboss;
     // 보스전 시작
     public void BossStart()
     {
@@ -112,7 +114,8 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateGamePlayingUI();
         // 보스 스폰
 
-        //UIManager.Instance.UpdateLevelText(Level);
+        Instantiate(boss);
+        isboss = true;
     }
 
     // 보스 클리어시
