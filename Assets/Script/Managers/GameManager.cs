@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public int Level = 1;
     public int startTime = 5;
     public bool isStartGame = false;
+    GameObject playerObject;
 
     [Header("소환")]
     public List<Transform> spawnTransformList = new List<Transform>();         // 프리팹 소환 장소 리스트,           0: 구름, 1: 상어, 2: 크라켄
@@ -82,6 +83,8 @@ public class GameManager : MonoBehaviour
         isStartGame = false;
         isboss = false;
 
+        playerObject = GameObject.FindGameObjectWithTag("Player");
+
         spawnIntervalCorouineList = new List<Coroutine>();
 
         // 이전의 코루틴들이 존재할 시, 멈추고 비우기
@@ -129,13 +132,6 @@ public class GameManager : MonoBehaviour
         GameStart();
     }
 
-    // 게임 재시작
-    public void GameRestart()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        GameStart();
-    }
-
     // 상점 씬으로 넘어감
     public void GoShopScene()
     {
@@ -167,6 +163,8 @@ public class GameManager : MonoBehaviour
     // 보스전 시작
     public void BossStart()
     {
+        playerObject.transform.Find("Whale").gameObject.SetActive(false);
+
         //  보스 UI 활성화
         UIManager.Instance.UpdateBossStart();
         bossHealthBarFill = UIManager.Instance.gameObject.transform.GetChild(6).GetChild(1).GetComponent<Image>();  // 보스 체력바

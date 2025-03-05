@@ -68,12 +68,12 @@ public class IslandTornadoSpawner : MonoBehaviour
         }
     }
 
-    void OnDrawGizmos()
-    {
-        Color color = new Color(1, 0, 0, 0.25f);
-        Gizmos.color = color;
+    //void OnDrawGizmos()
+    //{
+    //    Color color = new Color(1, 0, 0, 0.25f);
+    //    Gizmos.color = color;
 
-        Vector2 area = areaCollider.size;
-        Gizmos.DrawCube(transform.position, area);
-    }
+    //    Vector2 area = areaCollider.size;
+    //    Gizmos.DrawCube(transform.position, area);
+    //}
 }

@@ -45,7 +45,7 @@ public class UIManager : MonoBehaviour
 
         // 재시작 버튼
         RestartBtn = overUI.transform.GetChild(1).GetComponent<Button>();
-        RestartBtn.onClick.AddListener(() => GameManager.Instance.GameRestart());
+        RestartBtn.onClick.AddListener(() => GameManager.Instance.GoShopScene());
         if (RestartBtn != null)
             Debug.Log("재시작 이벤트 등록 되어있음");
 
