@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     [Header("소환")]
     public List<Transform> spawnTransformList = new List<Transform>();         // 프리팹 소환 장소 리스트,    0: 구름, 1: 상어, 2: 크라켄
     public List<GameObject> spawnPrefabList = new List<GameObject>();          // 프리팹 리스트,              0: 구름, 1: 상어, 2: 크라켄
-    public List<Coroutine> spawnIntervalCorouineList = new List<Coroutine>(3); // 프리팹 소환 코루틴 리스트,  0: 구름, 1: 상어
+    public List<Coroutine> spawnIntervalCorouineList; // 프리팹 소환 코루틴 리스트,  0: 구름, 1: 상어
     public bool isboss;
 
     void Awake()
@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        else
+            Destroy(gameObject);
     }
 
     void Start()
@@ -39,10 +41,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (isGameOver) 
+        if (isGameOver)
             return;
 
-        UpdateTimer();
+        if(SceneManager.GetActiveScene().name == "IntegrateScene")
+            UpdateTimer();
 
         if (playTime > 15 && !isboss)
             BossStart();
@@ -71,14 +74,20 @@ public class GameManager : MonoBehaviour
     // 게임 시작
     public void GameStart()
     {
-        isboss = false;
         isGameOver = false;
         isGameClear = false;
+        playTime = 0;
+        Level = 1;
+        startTime = 5;
+        isStartGame = false;
+        isboss = false;
+
+        spawnIntervalCorouineList = new List<Coroutine>();
 
         // 이전의 코루틴들이 존재할 시, 멈추고 비우기
         StopAllCoroutines();
-        for (int i = 0; i < spawnIntervalCorouineList.Count; i++)
-            spawnIntervalCorouineList[i] = null;
+        //for (int i = 0; i < spawnIntervalCorouineList.Count; i++)
+        //    spawnIntervalCorouineList[i] = null;
 
         // 구름 소환
         if (spawnIntervalCorouineList.Count == 0)
@@ -96,7 +105,7 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateGamePlayingUI();
 
         // 상어 소환
-        if(spawnIntervalCorouineList.Count == 1)
+        if (spawnIntervalCorouineList.Count == 1)
         {
             spawnIntervalCorouineList.Add(StartCoroutine(SpawnIntervalPrefabCoroutine(spawnPrefabList[1], 2.0f)));
 
@@ -136,8 +145,11 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateGamePlayingUI();
 
         // 상어 소환 중지
-        StopCoroutine(spawnIntervalCorouineList[1]);
-        spawnIntervalCorouineList[1] = null;
+        if (spawnIntervalCorouineList.Count >= 2)
+        {
+            StopCoroutine(spawnIntervalCorouineList[1]);
+            spawnIntervalCorouineList[1] = null;
+        }
 
         // 크라켄 소환
         isboss = true;
@@ -162,7 +174,7 @@ public class GameManager : MonoBehaviour
     // 일정 주기로 계속 프리팹 소환
     IEnumerator SpawnIntervalPrefabCoroutine(GameObject prefab, float interval)
     {
-        while(true)
+        while (true)
         {
             int randomPosX = Random.Range(-7, 7);
             Instantiate(prefab, new Vector3(randomPosX, 7, 0), Quaternion.identity);

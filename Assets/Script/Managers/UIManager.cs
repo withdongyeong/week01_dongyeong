@@ -17,18 +17,15 @@ public class UIManager : MonoBehaviour
     public Text gameTime;
     public Text gameLevel;
 
+    public int testNum = 1;
+
     void Awake()
     {
         if(_instance == null)
         {
             _instance = this;
-            DontDestroyOnLoad(gameObject);
+            FindUI();
         }
-        else
-        {
-            Destroy(gameObject);
-        }
-        FindUI();
     }
 
     void Start()
@@ -52,7 +49,8 @@ public class UIManager : MonoBehaviour
     public void UpdateGameStartUI()
     {
         startUI.SetActive(true);
-        gameTime.enabled = true;
+        gameTime.gameObject.SetActive(true);
+        gameLevel.gameObject.SetActive(true);
     }
 
     public void UpdateGamePlayingUI()
@@ -93,5 +91,19 @@ public class UIManager : MonoBehaviour
     public void GameReplay()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if(scene.name == "IntegrateScene")
+        {
+            FindUI();
+
+            Debug.LogWarning("∞‘¿” æ¿");
+        }
+        else if(scene.name == "SceneShop")
+        {
+            Debug.LogWarning("ªÛ¡° æ¿");
+        }
     }
 }

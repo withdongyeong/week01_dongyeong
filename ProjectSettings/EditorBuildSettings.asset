@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/IntegrateSceneBoat.unity
-    guid: 950b33e309fa42845b3ab927443ce784
+    path: Assets/Scenes/IntegrateScene.unity
+    guid: c3cdd1b0365cc1348acb01904ff98420
   - enabled: 1
     path: Assets/Scenes/SceneShop.unity
     guid: 18bf05f0bba71dc479d586701310d029

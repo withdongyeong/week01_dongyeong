@@ -14,7 +14,7 @@ public class Bbb10311031_PlayerAttack : MonoBehaviour
     {
         cameraController = Camera.main.GetComponent<CameraController>();
 
-        maxAttackCount += StateManager.Instance.SpearCount();
+        maxAttackCount += StateManager.Instance.SpearCount;
         attackCount = maxAttackCount;
     }
     void Update()
