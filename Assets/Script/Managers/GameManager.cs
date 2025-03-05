@@ -130,6 +130,13 @@ public class GameManager : MonoBehaviour
         GameStart();
     }
 
+    // 게임 재시작
+    public void GameRestart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GameStart();
+    }
+
     // 상점 씬으로 넘어감
     public void GoShopScene()
     {
