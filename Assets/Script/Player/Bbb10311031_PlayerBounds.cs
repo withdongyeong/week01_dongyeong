@@ -32,4 +32,12 @@ public class Bbb10311031_PlayerBounds : MonoBehaviour
         // 위치 적용
         transform.position = pos;
     }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Obstacle"))
+        {
+            Debug.Log("장애물");
+        }
+        //Debug.Log("장애물?");
+    }
 }
