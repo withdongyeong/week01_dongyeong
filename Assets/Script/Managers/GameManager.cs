@@ -26,6 +26,10 @@ public class GameManager : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     void Start()
@@ -72,6 +76,8 @@ public class GameManager : MonoBehaviour
     {
         isboss = false;
         isGameOver = false;
+        playTime = 0;
+        UIManager.Instance.UpdateGameStartUI();
         if (enemySpawner != null) enemySpawner.SetActive(false);
     }
 
@@ -101,16 +107,15 @@ public class GameManager : MonoBehaviour
     // 플레이씬으로 넘어감
     public void GoGame()
     {
-        SceneManager.LoadScene(0);
         GameStart();
+        SceneManager.LoadScene(0);
     }
 
     bool isboss;
     // 보스전 시작
     public void BossStart()
     {
-
-        enemySpawner.SetActive(false);
+        if (enemySpawner != null) enemySpawner.SetActive(false);
         UIManager.Instance.UpdateGamePlayingUI();
         // 보스 스폰
 

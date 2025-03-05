@@ -83,6 +83,7 @@ public class PlayerMove : MonoBehaviour
         {
             // 감속 시 관성을 줄이기 위한 감속 처리
             rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
+      
         }
 
         // 속도 제한 적용

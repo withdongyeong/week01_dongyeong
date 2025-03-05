@@ -58,6 +58,7 @@ public class KrakenMove : MonoBehaviour
             {
                 // 플레이어와 가까우면 밀리 어택
                 StartCoroutine(MeleeAttack());
+                player.GetComponent<PlayerHealth>().TakeDamage(10);
             }
         }
     }
