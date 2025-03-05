@@ -10,7 +10,7 @@ public class StateManager : MonoBehaviour
     static int luckCoin = 2;
     int _spearCount;
     int _reloadUpgradeCount = 1;
-    int _myCoin;
+    int _myCoin = 10;
     float _luckLevel;
     public static StateManager Instance { get; private set; }
 
@@ -70,6 +70,8 @@ public class StateManager : MonoBehaviour
         if (_myCoin >= coin)
         {
             _myCoin -= coin;
+            ShopUiManager shopUiManager = GameObject.Find("ShopUIManager").GetComponent<ShopUiManager>();
+            if (shopUiManager != null) shopUiManager.UpdatePurchase();
             return true;
         }
             //업그레이드 실패 메시지

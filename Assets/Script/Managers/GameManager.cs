@@ -9,18 +9,18 @@ public class GameManager : MonoBehaviour
     static GameManager _instance;
     public static GameManager Instance { get { return _instance; } private set { } }
 
-    [Header("ÄÁÅÙÃ÷")]
+    [Header("ì»¨í…ì¸ ")]
     public bool isGameOver;
     public bool isGameClear;
-    public float playTime = 0;  // ÇÃ·¹ÀÌ ½Ã°£
+    public float playTime = 0;  // í”Œë ˆì´ ì‹œê°„
     public int Level = 1;
     public int startTime = 5;
     public bool isStartGame = false;
 
-    [Header("¼ÒÈ¯")]
-    public List<Transform> spawnTransformList = new List<Transform>();         // ÇÁ¸®ÆÕ ¼ÒÈ¯ Àå¼Ò ¸®½ºÆ®,    0: ±¸¸§, 1: »ó¾î, 2: Å©¶óÄË
-    public List<GameObject> spawnPrefabList = new List<GameObject>();          // ÇÁ¸®ÆÕ ¸®½ºÆ®,              0: ±¸¸§, 1: »ó¾î, 2: Å©¶óÄË
-    public List<Coroutine> spawnIntervalCorouineList = new List<Coroutine>(3); // ÇÁ¸®ÆÕ ¼ÒÈ¯ ÄÚ·çÆ¾ ¸®½ºÆ®,  0: ±¸¸§, 1: »ó¾î
+    [Header("ì†Œí™˜")]
+    public List<Transform> spawnTransformList = new List<Transform>();         // í”„ë¦¬íŒ¹ ì†Œí™˜ ì¥ì†Œ ë¦¬ìŠ¤íŠ¸,    0: êµ¬ë¦„, 1: ìƒì–´, 2: í¬ë¼ì¼„
+    public List<GameObject> spawnPrefabList = new List<GameObject>();          // í”„ë¦¬íŒ¹ ë¦¬ìŠ¤íŠ¸,              0: êµ¬ë¦„, 1: ìƒì–´, 2: í¬ë¼ì¼„
+    public List<Coroutine> spawnIntervalCorouineList = new List<Coroutine>(3); // í”„ë¦¬íŒ¹ ì†Œí™˜ ì½”ë£¨í‹´ ë¦¬ìŠ¤íŠ¸,  0: êµ¬ë¦„, 1: ìƒì–´
     public bool isboss;
 
     void Awake()
@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
         if (playTime > 15 && !isboss)
             BossStart();
 
-        // °ÔÀÓ ½ÃÀÛ
+        // ê²Œì„ ì‹œì‘
         if (playTime > startTime && !isStartGame)
         {
             isStartGame = true;
@@ -68,90 +68,90 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateTimeText((int)playTime);
     }
 
-    // °ÔÀÓ ½ÃÀÛ
+    // ê²Œì„ ì‹œì‘
     public void GameStart()
     {
         isboss = false;
         isGameOver = false;
         isGameClear = false;
 
-        // ÀÌÀüÀÇ ÄÚ·çÆ¾µéÀÌ Á¸ÀçÇÒ ½Ã, ¸ØÃß°í ºñ¿ì±â
+        // ì´ì „ì˜ ì½”ë£¨í‹´ë“¤ì´ ì¡´ì¬í•  ì‹œ, ë©ˆì¶”ê³  ë¹„ìš°ê¸°
         StopAllCoroutines();
         for (int i = 0; i < spawnIntervalCorouineList.Count; i++)
             spawnIntervalCorouineList[i] = null;
 
-        // ±¸¸§ ¼ÒÈ¯
+        // êµ¬ë¦„ ì†Œí™˜
         if (spawnIntervalCorouineList.Count == 0)
         {
             spawnIntervalCorouineList.Add(StartCoroutine(SpawnIntervalPrefabCoroutine(spawnPrefabList[0], 10.0f)));
 
-            Debug.Log($"±¸¸§ ÄÚ·çÆ¾ Ãß°¡, ÇöÀç ÄÚ·çÆ¾ °³¼ö: {spawnIntervalCorouineList.Count}");
+            Debug.Log($"êµ¬ë¦„ ì½”ë£¨í‹´ ì¶”ê°€, í˜„ì¬ ì½”ë£¨í‹´ ê°œìˆ˜: {spawnIntervalCorouineList.Count}");
         }
     }
 
-    // °ÔÀÓ ÇÃ·¹ÀÌ Áß 
+    // ê²Œì„ í”Œë ˆì´ ì¤‘ 
     public void GamePlaying()
     {
-        // °ÔÀÓ ÁøÇà UI·Î ÀüÈ¯
+        // ê²Œì„ ì§„í–‰ UIë¡œ ì „í™˜
         UIManager.Instance.UpdateGamePlayingUI();
 
-        // »ó¾î ¼ÒÈ¯
+        // ìƒì–´ ì†Œí™˜
         if(spawnIntervalCorouineList.Count == 1)
         {
             spawnIntervalCorouineList.Add(StartCoroutine(SpawnIntervalPrefabCoroutine(spawnPrefabList[1], 2.0f)));
 
-            Debug.Log($"»ó¾î ÄÚ·çÆ¾ Ãß°¡, ÇöÀç ÄÚ·çÆ¾ °³¼ö: {spawnIntervalCorouineList.Count}");
+            Debug.Log($"ìƒì–´ ì½”ë£¨í‹´ ì¶”ê°€, í˜„ì¬ ì½”ë£¨í‹´ ê°œìˆ˜: {spawnIntervalCorouineList.Count}");
         }
     }
 
 
-    // °ÔÀÓ¿À¹ö µÆÀ» ¶§
+    // ê²Œì„ì˜¤ë²„ ëì„ ë•Œ
     public void GameOver()
     {
-        UIManager.Instance.UpdateGameOverUI(); // °ÔÀÓ ¿À¹ö UI º¸ÀÌ±â
+        UIManager.Instance.UpdateGameOverUI(); // ê²Œì„ ì˜¤ë²„ UI ë³´ì´ê¸°
 
         //if (enemySpawner != null) enemySpawner.SetActive(false);
         isGameOver = true;
     }
 
-    // ÇÃ·¹ÀÌ ¾ÀÀ¸·Î ³Ñ¾î°¨
+    // í”Œë ˆì´ ì”¬ìœ¼ë¡œ ë„˜ì–´ê°
     public void GoInGameScene()
     {
         SceneManager.LoadScene(0);
         GameStart();
     }
 
-    // »óÁ¡ ¾ÀÀ¸·Î ³Ñ¾î°¨
+    // ìƒì  ì”¬ìœ¼ë¡œ ë„˜ì–´ê°
     public void GoShopScene()
     {
-        UIManager.Instance.UpdateGoShopUI();    // ÀÎ°ÔÀÓ UI Á¤¸®
-        SceneManager.LoadScene(1);              // »óÁ¡ ¾ÀÀ¸·Î ÀÌµ¿
+        UIManager.Instance.UpdateGoShopUI();    // ì¸ê²Œì„ UI ì •ë¦¬
+        SceneManager.LoadScene(1);              // ìƒì  ì”¬ìœ¼ë¡œ ì´ë™
     }
 
 
-    #region º¸½º
-    // º¸½ºÀü ½ÃÀÛ
+    #region ë³´ìŠ¤
+    // ë³´ìŠ¤ì „ ì‹œì‘
     public void BossStart()
     {
         UIManager.Instance.UpdateGamePlayingUI();
 
-        // »ó¾î ¼ÒÈ¯ ÁßÁö
+        // ìƒì–´ ì†Œí™˜ ì¤‘ì§€
         StopCoroutine(spawnIntervalCorouineList[1]);
         spawnIntervalCorouineList[1] = null;
 
-        // Å©¶óÄË ¼ÒÈ¯
+        // í¬ë¼ì¼„ ì†Œí™˜
         isboss = true;
         Instantiate(spawnPrefabList[2]);
     }
 
-    // º¸½º Å¬¸®¾î½Ã
+    // ë³´ìŠ¤ í´ë¦¬ì–´ì‹œ
     public void BossClear()
     {
         isGameOver = true;
 
-        //  UI È°¼ºÈ­
-        // (±¸Çö ¿¹Á¤)
-        Debug.Log("º¸½º Å¬¸®¾î~");
+        //  UI í™œì„±í™”
+        // (êµ¬í˜„ ì˜ˆì •)
+        Debug.Log("ë³´ìŠ¤ í´ë¦¬ì–´~");
 
 
 
@@ -159,7 +159,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    // ÀÏÁ¤ ÁÖ±â·Î °è¼Ó ÇÁ¸®ÆÕ ¼ÒÈ¯
+    // ì¼ì • ì£¼ê¸°ë¡œ ê³„ì† í”„ë¦¬íŒ¹ ì†Œí™˜
     IEnumerator SpawnIntervalPrefabCoroutine(GameObject prefab, float interval)
     {
         while(true)

@@ -24,6 +24,10 @@ public class UIManager : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        else
+        {
+            Destroy(gameObject);
+        }
         FindUI();
     }
 
@@ -48,6 +52,7 @@ public class UIManager : MonoBehaviour
     public void UpdateGameStartUI()
     {
         startUI.SetActive(true);
+        gameTime.enabled = true;
     }
 
     public void UpdateGamePlayingUI()
