@@ -7,7 +7,7 @@ public class UIManager : MonoBehaviour
     static UIManager _instance;
     public static UIManager Instance { get { return _instance; } private set { } }
 
-    public bool IsReadyUI { get; private set; }
+    //public bool IsReadyUI { get; private set; }
 
     [Header("UI")]
     public GameObject startUI;
@@ -42,17 +42,12 @@ public class UIManager : MonoBehaviour
         gameTime = transform.GetChild(4).GetComponent<Text>();
         gameLevel = transform.GetChild(5).GetComponent<Text>();
 
-        IsReadyUI = true;
+        //IsReadyUI = true;
     }
 
     public void UpdateGameStartUI()
     {
         startUI.SetActive(true);
-    }
-
-    public void EndGameStartUI()
-    {
-        startUI.SetActive(false);
     }
 
     public void UpdateGamePlayingUI()
@@ -75,16 +70,12 @@ public class UIManager : MonoBehaviour
 
     public void UpdateGoShopUI()
     {
-        startUI.SetActive(false);
-        overUI.SetActive(false);
-        clearUI.SetActive(false);
+        foreach (Transform ui in transform)
+            ui.gameObject.SetActive(false);
     }
 
     public void UpdateLevelText(int level)
     {
-        if (gameLevel == null)
-            Debug.Log("유아이 널");
-
         gameLevel.text = $"Level {level}";
     }
 
