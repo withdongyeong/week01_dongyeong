@@ -4,9 +4,11 @@ public class StateManager : MonoBehaviour
 {
     static float _relodaingUpgradeValue = 0.2f;
     static float _reloadingTime = 1;
+    static float _luck = 2f;
     int _spearCount;
     int _reloadUpgradeCount = 1;
     int _myCoin;
+    float _luckLevel;
 
 
     public static StateManager Instance { get; private set; }
@@ -51,7 +53,15 @@ public class StateManager : MonoBehaviour
         }
         if (coin > _myCoin)
         {
-            // 함수 추가
+            // 코인이 부족할때. 함수 추가
         }
+    }
+    public float GetLuckLevel()
+    {
+        return _luckLevel;
+    }
+    public void LuckLevelUpgrade()
+    {
+        _luckLevel += _luck;
     }
 }
