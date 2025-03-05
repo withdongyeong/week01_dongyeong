@@ -80,7 +80,7 @@ public class Spear : MonoBehaviour
                 //Destroy(gameObject);
             }
         }
-        else if (isReturn)
+        else if (isReturn && playerObj != null)
         {
             transform.up = Vector3.Lerp(transform.up, (targetPosition - playerObj.transform.position).normalized, Time.deltaTime);
             transform.position = Vector3.MoveTowards(transform.position, playerObj.transform.position, returnSpeed * Time.deltaTime);

@@ -16,11 +16,12 @@ public class GameManager : MonoBehaviour
     public int Level = 1;
     public int startTime = 5;
     public bool isStartGame = false;
+    GameObject playerObject;
 
     [Header("소환")]
-    public List<Transform> spawnTransformList = new List<Transform>();         // 프리팹 소환 장소 리스트,    0: 구름, 1: 상어, 2: 크라켄
-    public List<GameObject> spawnPrefabList = new List<GameObject>();          // 프리팹 리스트,              0: 구름, 1: 상어, 2: 크라켄
-    public List<Coroutine> spawnIntervalCorouineList; // 프리팹 소환 코루틴 리스트,  0: 구름, 1: 상어
+    public List<Transform> spawnTransformList = new List<Transform>();         // 프리팹 소환 장소 리스트,           0: 구름, 1: 상어, 2: 크라켄
+    public List<GameObject> spawnPrefabList = new List<GameObject>();          // 프리팹 리스트,                     0: 구름, 1: 상어, 2: 크라켄
+    public List<Coroutine> spawnIntervalCorouineList;                          // 프리팹 주기적 소환 코루틴 리스트,  0: 구름, 1: 상어
     public bool isboss;
 
     void Awake()
@@ -93,7 +94,6 @@ public class GameManager : MonoBehaviour
         if (spawnIntervalCorouineList.Count == 0)
         {
             spawnIntervalCorouineList.Add(StartCoroutine(SpawnIntervalPrefabCoroutine(spawnPrefabList[0], 10.0f)));
-
             Debug.Log($"구름 코루틴 추가, 현재 코루틴 개수: {spawnIntervalCorouineList.Count}");
         }
     }
@@ -161,6 +161,9 @@ public class GameManager : MonoBehaviour
     // 보스전 시작
     public void BossStart()
     {
+        playerObject = GameObject.FindGameObjectWithTag("Player");
+        playerObject.transform.Find("Whale").gameObject.SetActive(false);
+
         //  보스 UI 활성화
         UIManager.Instance.UpdateBossStart();
         bossHealthBarFill = UIManager.Instance.gameObject.transform.GetChild(6).GetChild(1).GetComponent<Image>();  // 보스 체력바

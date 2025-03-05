@@ -13,10 +13,12 @@ public class UIManager : MonoBehaviour
     public GameObject startUI;
     public GameObject playUI;
     public GameObject overUI;
+    public Button RestartBtn;
     public GameObject clearUI;
     public Text gameTime;
     public Text gameLevel;
     public GameObject bossUI;
+
 
     public int testNum = 1;
 
@@ -40,6 +42,13 @@ public class UIManager : MonoBehaviour
         playUI = transform.GetChild(1).gameObject;
         overUI = transform.GetChild(2).gameObject;
         clearUI = transform.GetChild(3).gameObject;
+
+        // 재시작 버튼
+        RestartBtn = overUI.transform.GetChild(1).GetComponent<Button>();
+        RestartBtn.onClick.AddListener(() => GameManager.Instance.GoShopScene());
+        if (RestartBtn != null)
+            Debug.Log("재시작 이벤트 등록 되어있음");
+
 
         gameTime = transform.GetChild(4).GetComponent<Text>();
         gameLevel = transform.GetChild(5).GetComponent<Text>();
