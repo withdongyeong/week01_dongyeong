@@ -464,11 +464,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
-  returnSpeed: 3
+  returnSpeed: 6
   targetPosition: {x: 0, y: 0, z: 0}
   startPosition: {x: 0, y: 0, z: 0}
-  acceleration: 2
   tail: {fileID: 6266544941973408025}
+  acceleration: 2
 --- !u!1 &893850488688964499
 GameObject:
   m_ObjectHideFlags: 0

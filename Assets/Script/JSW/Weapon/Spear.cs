@@ -6,9 +6,10 @@ using static UnityEngine.GraphicsBuffer;
 public class Spear : MonoBehaviour
 {
     public float speed = 6f; // 이동 속도
-    public float returnSpeed = 3f;
+    public float returnSpeed = 6f;
     public Vector3 targetPosition; // 클릭한 위치
     public Vector3 startPosition; // 시작 위치 
+    public GameObject tail;    // 끈 연결 부분
 
     public float acceleration = 2f; // 가속도
     private float currentSpeed = 0f; // 현재 속도
@@ -16,22 +17,29 @@ public class Spear : MonoBehaviour
     private Vector3 originalScale; // 원래 크기
     private bool isMoving = false;
     private bool isReturn = false;
-    private float journeyLength;
     private float reloadingTime;
-
-    float distanceCovered = 0f;
-    float fractionOfJourney = 0f;
 
     GameObject enemy;
     GameObject playerObj;
+
+    Transform[] points = new Transform[2];
 
     void Start()
     {
         playerObj = GameObject.FindGameObjectWithTag("Player");
         startPosition = transform.position;
         targetPosition = new Vector3(targetPosition.x, targetPosition.y, 0f); // 3D 좌표값 2D로 변경
-        journeyLength = Vector3.Distance(startPosition, targetPosition);
+        returnSpeed = returnSpeed * StateManager.Instance.ReloadingTime();
+        SetTail();
+
         isMoving = true;
+    }
+
+    void SetTail()
+    {
+        points[0] = playerObj.transform;
+        points[1] = gameObject.transform;
+        tail.GetComponent<LineController>().SetUpLine(points);
     }
 
 
@@ -41,11 +49,10 @@ public class Spear : MonoBehaviour
 
         if (isMoving)
         {
-            distanceCovered += Time.deltaTime * speed; // 이동 거리
             transform.up = (targetPosition - startPosition).normalized; // 작살 물체 방향
 
             // 이동
-            transform.position = Vector3.Lerp(transform.position, targetPosition, speed*Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, targetPosition,speed * Time.deltaTime);
 
             // 목적지 도착하면 멈춤
             if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
@@ -67,11 +74,9 @@ public class Spear : MonoBehaviour
         else if (isReturn)
         {
             transform.up = Vector3.Lerp(transform.up, (targetPosition - playerObj.transform.position).normalized, Time.deltaTime);
-            //transform.up = (targetPosition - playerObj.transform.position).normalized; // 작살 물체 반대방향 
-            transform.position = Vector3.MoveTowards(transform.position, playerObj.transform.position, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, playerObj.transform.position, returnSpeed * Time.deltaTime);
 
-            currentSpeed += acceleration * reloadingTime * Time.deltaTime; // 시간이 지날수록 속도 증가
-            transform.position = Vector3.MoveTowards(transform.position, playerObj.transform.position, currentSpeed * Time.deltaTime);
+
             SpearRotation();
 
             if (Vector3.Distance(transform.position, playerObj.transform.position) < 0.1f)
@@ -86,6 +91,11 @@ public class Spear : MonoBehaviour
         if (other.CompareTag("Enemy")) // 적과 충돌하면
         {
             enemy = other.gameObject;
+        }
+        if (other.CompareTag("Obstacle")) // 적과 충돌하면
+        {
+            isMoving = false;
+            isReturn = true;
         }
     }
 
