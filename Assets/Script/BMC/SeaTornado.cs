@@ -40,6 +40,15 @@ public class SeaTornado : Attraction
     void Destory()
     {
         if (transform.position.z >= 1f)
+        {
             Debug.Log("토네이도 소멸!");
+            if(isExistPlayer)
+            {
+                Debug.Log("토네이도가 플레이어 체력 감소시킴!");
+                isExistPlayer = false;
+            }
+        }
     }
+
+    // OnTrigger, OnCollision 추가 금지
 }

@@ -1,28 +1,24 @@
+using TMPro.Examples;
 using UnityEngine;
 
 public class IslandSpawner : MonoBehaviour
 {
-    public float minDistance = 2f; // 섬 간 최소 거리
-    public GameObject islandPrefab;
+    [Header("섬")]
     public int spawnIslandCount = 2;
-
-    public BoxCollider2D areaCollider;
-
+    public float minDistance = 2f; // 섬 간 최소 거리
     public Vector2 screenArea;
-
+    public BoxCollider2D areaCollider;
     [SerializeField] GameObject[] IslandPrefabArray = new GameObject[5];
+
+    [Header("토네이도")]
+    public int spawnTornadoCount = 2;
 
     void Start()
     {
-        Camera mainCamera = Camera.main;
-
-        // 카메라의 화면 경계를 월드 좌표로 변환
-        screenArea = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, mainCamera.transform.position.z));
-
-        // 구역 크기
-        areaCollider.size = screenArea;
-
-        Debug.Log(areaCollider.size);
+        // 카메라의 화면 경계를 월드 좌표로 변환하여 구역 크기로 설정
+        CameraController cameraController = Camera.main.GetComponent<CameraController>();
+        screenArea = cameraController.ScreenArea;
+        areaCollider.size = screenArea;             // 구역 크기로 설정
 
         SpawnIsland();
     }
@@ -60,5 +56,4 @@ public class IslandSpawner : MonoBehaviour
         Vector2 area = areaCollider.size;
         Gizmos.DrawCube(transform.position, area);
     }
-
 }
