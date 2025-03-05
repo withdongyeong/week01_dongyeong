@@ -252,41 +252,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 305237699}
+  - {fileID: 968767479}
   - {fileID: 539074959}
   - {fileID: 385427519}
   - {fileID: 1024985380}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &185532349
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 185532350}
-  m_Layer: 0
-  m_Name: '------------------- '
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &185532350
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 185532349}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0021385252, y: -4.568178, z: -0.007445986}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &240926084
@@ -463,37 +432,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!1 &305237698
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 305237699}
-  m_Layer: 0
-  m_Name: Islands
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &305237699
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 305237698}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 76059816}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &385427518
 GameObject:
   m_ObjectHideFlags: 0
@@ -1319,6 +1257,7 @@ MonoBehaviour:
   startUI: {fileID: 0}
   playUI: {fileID: 0}
   overUI: {fileID: 0}
+  RestartBtn: {fileID: 0}
   clearUI: {fileID: 0}
   gameTime: {fileID: 0}
   gameLevel: {fileID: 0}
@@ -1563,7 +1502,7 @@ GameObject:
   - component: {fileID: 968767479}
   - component: {fileID: 968767478}
   m_Layer: 0
-  m_Name: IslandSpawnTest
+  m_Name: IslandTornadoSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1585,13 +1524,15 @@ MonoBehaviour:
   minDistance: 0.5
   screenArea: {x: 0, y: 0}
   areaCollider: {fileID: 600620124}
-  IslandPrefabArray:
+  islandPrefabArray:
   - {fileID: 3577383189568905669, guid: 51c5f3b92d2db7540b6370d31bc4f75e, type: 3}
   - {fileID: 1413141092216774962, guid: 242be2352a7a0de42b1c5d702d78a11c, type: 3}
   - {fileID: 55875378809720714, guid: caf23c8cc3efe174aab835fe04c65a1e, type: 3}
   - {fileID: 7999418950963405836, guid: 53661b66d5be3474a954acd77b458cd0, type: 3}
   - {fileID: 8480138585967245939, guid: d62ad5da20d0ab74baeb32adc40ae4ef, type: 3}
   spawnTornadoCount: 2
+  tornadoPrefab: {fileID: 2241344920595703642, guid: 0bc32da812893fd47945703f372e0fce, type: 3}
+  tornadoSpawnInterval: 15
 --- !u!4 &968767479
 Transform:
   m_ObjectHideFlags: 0
@@ -1600,12 +1541,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 968767477}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.5323639, y: -15.615322, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 76059816}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1024985379
 GameObject:
@@ -2759,6 +2700,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boat
       objectReference: {fileID: 0}
+    - target: {fileID: 2807004633004308172, guid: 4127711dae6642548b4aa694666ab5ae, type: 3}
+      propertyPath: isExistBody
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2807004633004308172, guid: 4127711dae6642548b4aa694666ab5ae, type: 3}
+      propertyPath: isExistHead
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2807004633004308172, guid: 4127711dae6642548b4aa694666ab5ae, type: 3}
+      propertyPath: isExistTail
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2772,8 +2725,6 @@ SceneRoots:
   - {fileID: 1881482299}
   - {fileID: 810076434}
   - {fileID: 668350624835160929}
-  - {fileID: 185532350}
-  - {fileID: 968767479}
   - {fileID: 1572860394}
   - {fileID: 76059816}
   - {fileID: 526774922}
