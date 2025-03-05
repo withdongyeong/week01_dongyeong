@@ -18,13 +18,14 @@ public class PlayerHealth : MonoBehaviour
 
     void Start()
     {
+        healthBarFill = UIManager.Instance.gameObject.transform.GetChild(1).GetChild(1).GetComponent<Image>();
         originalPosition = Camera.main.transform.position; 
         currentHealth = maxHealth; // 시작할 때 최대 체력 설정
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy")) // 적과 충돌하면
+        if (other.CompareTag("Boss")) // 보스와 충돌하면
         {
             TakeDamage(10); // 데미지 받기 (10)
         }

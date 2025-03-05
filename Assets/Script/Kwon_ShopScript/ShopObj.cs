@@ -19,18 +19,24 @@ public class ShopObj : MonoBehaviour
             switch (characterState)
             {
                 case UpgradeItem.SpearCount:
-                    StateManager.Instance.BuySpear();
-                    StartCoroutine(Success());
-                    // 추가 업그레이드 후 이후처리 
+                    if (StateManager.Instance.BuySpear())
+                    {
+                        StartCoroutine(Success());
+                    }
+                    else StartCoroutine(Failure());                    
                     break;
                 case UpgradeItem.ReroadingTime:
-                    StateManager.Instance.ReroadingUpgrade();
-                    //
-                    break;
+                    if (StateManager.Instance.ReroadingUpgrade()) {
+                    StartCoroutine(Success());
+            }
+                    else StartCoroutine(Failure());
+            break;
                 case UpgradeItem.Luck:
-                    StateManager.Instance.LuckLevelUpgrade();
-                    //
-                    break;
+                    if (StateManager.Instance.LuckLevelUpgrade()) {
+                    StartCoroutine(Success());
+            }
+                    else StartCoroutine(Failure());
+            break;
 
             }
         }
@@ -38,7 +44,13 @@ public class ShopObj : MonoBehaviour
     IEnumerator Success()
     {
         msgSuccess.SetActive(true);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
+        msgSuccess.SetActive(false);
+    }
+    IEnumerator Failure()
+    {
+        msgFailure.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
         msgFailure.SetActive(false);
     }
 }

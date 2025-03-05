@@ -5,12 +5,13 @@ public class StateManager : MonoBehaviour
     static float _relodaingUpgradeValue = 0.2f;
     static float _reloadingTime = 1;
     static float _luck = 2f;
+    static int spearCoin = 3;
+    static int powerUpCoin = 2;
+    static int luckCoin = 2;
     int _spearCount;
     int _reloadUpgradeCount = 1;
     int _myCoin;
     float _luckLevel;
-
-
     public static StateManager Instance { get; private set; }
 
     void Awake()
@@ -25,22 +26,41 @@ public class StateManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void BuySpear()
+    public bool BuySpear()
     {
-        _spearCount++;        
+        if (UseCoin(spearCoin)) 
+        { 
+            _spearCount++;
+            return true;
+        }
+        return false;
     }
-    public void ReroadingUpgrade()
+    public bool ReroadingUpgrade()
     {
-        _reloadUpgradeCount++;
+        if (UseCoin(powerUpCoin)) 
+        { 
+            _reloadUpgradeCount++;
+            return true;
+        }
+        return false;
     }
-    public int SpearCount()
+    public bool LuckLevelUpgrade()
     {
-        return _spearCount;
-    }
+        if (UseCoin(luckCoin)) {
+            _luckLevel += _luck;
+            return true;
+        }
+        return false;    }
+    public int SpearCount() { return _spearCount; }
     public float ReloadingTime()
     {
         return _reloadingTime + (_relodaingUpgradeValue * _reloadUpgradeCount); // Spear.cs , isReturn 일때만 속도가 증가하도록 변경해야함 
     }
+    public float GetLuckLevel()
+    {
+        return _luckLevel;
+    }
+    public int GetCoin(){ return _myCoin; }
     public void Addcoin(int coin)
     {
         _myCoin += coin;
@@ -50,18 +70,9 @@ public class StateManager : MonoBehaviour
         if (_myCoin >= coin)
         {
             _myCoin -= coin;
-            //업그레이드 성공 매시지
             return true;
         }
             //업그레이드 실패 메시지
             return false;
-    }
-    public float GetLuckLevel()
-    {
-        return _luckLevel;
-    }
-    public void LuckLevelUpgrade()
-    {
-        _luckLevel += _luck;
     }
 }
