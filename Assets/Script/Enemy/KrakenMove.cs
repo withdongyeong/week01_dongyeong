@@ -63,7 +63,7 @@ public class KrakenMove : MonoBehaviour
             {
                 Debug.Log("공격 시작");
                 StartCoroutine(MeleeAttack());
-                player.GetComponent<PlayerHealth>().TakeDamage(10);
+                //player.GetComponent<PlayerHealth>().TakeDamage(10);
             }
         }
     }

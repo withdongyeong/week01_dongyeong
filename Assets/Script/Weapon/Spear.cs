@@ -112,6 +112,11 @@ public class Spear : MonoBehaviour
         {
             ReturnStart();
         }
+        if (other.CompareTag("Boss") && isMoving) // 보스과 충돌하면
+        {
+            GameManager.Instance.DamagedBossHP(2);
+            ReturnStart();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
