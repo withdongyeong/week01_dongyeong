@@ -14,8 +14,6 @@ public class PlayerHealth : MonoBehaviour
     public float shakeDuration = 0.3f; // 흔들리는 지속 시간
     public float shakeMagnitude = 0.2f; // 흔들림 강도
 
-    public GameManager gameManager;
-
     private Vector3 originalPosition;
 
     void Start()
@@ -51,7 +49,7 @@ public class PlayerHealth : MonoBehaviour
     void Die()
     {
         Debug.Log("플레이어 사망!");
-        gameManager.GameOver();
+        GameManager.Instance.GameOver();
         Destroy(gameObject); // 플레이어 삭제
     }
 

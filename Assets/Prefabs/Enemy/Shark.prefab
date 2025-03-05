@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1795570459332371849}
   - component: {fileID: 4888504134970316908}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2040413857719228724}
   - component: {fileID: 5607076287612605840}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fin2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 8319632471369259058}
   - component: {fileID: 2128866575650797844}
   - component: {fileID: 5686564601279237590}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -389,7 +389,7 @@ GameObject:
   - component: {fileID: 3494380584978664080}
   - component: {fileID: 6288576987744586993}
   - component: {fileID: 9064031910708270492}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -499,7 +499,7 @@ GameObject:
   - component: {fileID: 8970230673823770951}
   - component: {fileID: 3173976251755915515}
   - component: {fileID: 4233466465711129436}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -616,7 +616,7 @@ GameObject:
   - component: {fileID: 3928237026460017966}
   - component: {fileID: 744148997120422602}
   - component: {fileID: 1754659499604440912}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shark
   m_TagString: Enemy
   m_Icon: {fileID: 0}

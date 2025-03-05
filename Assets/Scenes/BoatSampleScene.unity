@@ -409,6 +409,10 @@ PrefabInstance:
       propertyPath: healthBarFill
       value: 
       objectReference: {fileID: 1029685972}
+    - target: {fileID: 5494529557254148686, guid: dbecbf49e0f27ee44a63f824ffcae74a, type: 3}
+      propertyPath: m_Constraints
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 8248272911471217327, guid: dbecbf49e0f27ee44a63f824ffcae74a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.02
@@ -449,10 +453,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3114062409201018637, guid: dbecbf49e0f27ee44a63f824ffcae74a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1577724585914340670, guid: dbecbf49e0f27ee44a63f824ffcae74a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 351995378}
   m_SourcePrefab: {fileID: 100100000, guid: dbecbf49e0f27ee44a63f824ffcae74a, type: 3}
 --- !u!1 &225829825
 GameObject:
@@ -729,6 +737,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd81d9076620702419b4f92212d8fbf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &351995369 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1577724585914340670, guid: dbecbf49e0f27ee44a63f824ffcae74a, type: 3}
+  m_PrefabInstance: {fileID: 169917251}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &351995378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351995369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d975b9f8594a6ca469ffaf3908cfafee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarFill: {fileID: 0}
+  maxHealth: 50
+  shakeDuration: 0.3
+  shakeMagnitude: 0.2
+  gameManager: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -830,7 +860,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 526774922}
-  - component: {fileID: 526774921}
+  - component: {fileID: 526774923}
   m_Layer: 0
   m_Name: Bbb10311031_SoundManager
   m_TagString: Untagged
@@ -838,25 +868,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &526774921
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 526774920}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e2a36a32c23971498ebe1a4bfa9cbce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bgmSource: {fileID: 553617276}
-  sfxSource: {fileID: 1657374016}
-  sfxClips:
-  - {fileID: 8300000, guid: cee582a6ee3ad904ba56ec2036eab8a0, type: 3}
-  - {fileID: 8300000, guid: 38841ebd688732d4aa110836d45d165a, type: 3}
-  - {fileID: 8300000, guid: d99f70bf068430040b502b7761210983, type: 3}
-  - {fileID: 8300000, guid: 29caf5f04d9086843a9d1f51391cac98, type: 3}
 --- !u!4 &526774922
 Transform:
   m_ObjectHideFlags: 0
@@ -874,6 +885,26 @@ Transform:
   - {fileID: 1657374017}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &526774923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526774920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 859ce5d4f9ee54d41a73521648d6a3d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgmSource: {fileID: 553617276}
+  sfxSource: {fileID: 1657374016}
+  sfxClips:
+  - {fileID: 8300000, guid: cee582a6ee3ad904ba56ec2036eab8a0, type: 3}
+  - {fileID: 8300000, guid: 4020f2755a9c42f4c99ff7602cdae696, type: 3}
+  - {fileID: 8300000, guid: 38841ebd688732d4aa110836d45d165a, type: 3}
+  - {fileID: 8300000, guid: d99f70bf068430040b502b7761210983, type: 3}
+  - {fileID: 8300000, guid: 29caf5f04d9086843a9d1f51391cac98, type: 3}
 --- !u!1 &540028941
 GameObject:
   m_ObjectHideFlags: 0
