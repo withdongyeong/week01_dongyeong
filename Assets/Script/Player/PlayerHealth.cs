@@ -36,7 +36,7 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("플레이어 체력: " + currentHealth);
         StartCoroutine(ShakeCamera());
 
-        SoundManager.instance.PlaySFX("Clash");
+        //SoundManager.instance.PlaySFX("Clash");
 
         healthBarFill.fillAmount = currentHealth / maxHealth;
 
