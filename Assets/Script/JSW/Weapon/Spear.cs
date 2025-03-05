@@ -68,11 +68,11 @@ public class Spear : MonoBehaviour
                 if (enemy != null)
                 {
                     Destroy(enemy);
-                    SoundManager.instance.PlaySFX("Clash");
+                    //SoundManager.instance.PlaySFX("Clash");
                 }
                 else
                 {
-                    SoundManager.instance.PlaySFX("SmallCanon");
+                    //SoundManager.instance.PlaySFX("SmallCanon");
                 }
                 isReturn = true; // 끝까지 도달했음
                 isMoving = false;

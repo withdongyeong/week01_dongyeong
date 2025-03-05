@@ -27,7 +27,7 @@ public class Bbb10311031_PlayerAttack : MonoBehaviour
             AttackCountDown();
             GameObject bulletObj = Instantiate(bullet, transform.position, Quaternion.identity);
             bulletObj.GetComponent<Spear>().targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Bbb10311031_SoundManager.instance.PlaySFX("Canon");
+            //Bbb10311031_SoundManager.instance.PlaySFX("Canon");
             StartCoroutine(ShakeCamera());
         }
     }
