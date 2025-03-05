@@ -2412,8 +2412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SpearCount>k__BackingField: 0
-  <MyCoin>k__BackingField: 10
-  <LuckLevel>k__BackingField: 0
+  <MyCoin>k__BackingField: 0
 --- !u!4 &1847807619
 Transform:
   m_ObjectHideFlags: 0

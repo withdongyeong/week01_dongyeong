@@ -7,14 +7,14 @@ public class StateManager : MonoBehaviour
 
     static float _relodaingUpgradeValue = 0.2f;
     static float _reloadingTime = 1;
-    static float _luck = 2f;
-    static int spearCoin = 3;
-    static int powerUpCoin = 2;
-    static int luckCoin = 2;
+    // static float _luck = 2f;
+    static int spearCoin = 15;
+    static int powerUpCoin = 4;
+    // static int luckCoin = 2;
     [field: SerializeField] public int SpearCount { get; set; }
     int _reloadUpgradeCount = 1;
-    [field: SerializeField] public int MyCoin { get; private set; } = 10;
-    [field: SerializeField] public float LuckLevel { get; private set; }
+    [field: SerializeField] public int MyCoin { get; private set; } = 0;
+    // [field: SerializeField] public float LuckLevel { get; private set; }
 
 
     void Awake()
@@ -48,15 +48,15 @@ public class StateManager : MonoBehaviour
         }
         return false;
     }
-    public bool LuckLevelUpgrade()
-    {
-        if (UseCoin(luckCoin)) 
-        {
-            LuckLevel += _luck;
-            return true;
-        }
-        return false;    
-    }
+    //public bool LuckLevelUpgrade()
+    //{
+    //    if (UseCoin(luckCoin)) 
+    //    {
+    //        LuckLevel += _luck;
+    //        return true;
+    //    }
+    //    return false;    
+    //}
     public float ReloadingTime()
     {
         return _reloadingTime + (_relodaingUpgradeValue * _reloadUpgradeCount); // Spear.cs , isReturn 일때만 속도가 증가하도록 변경해야함 

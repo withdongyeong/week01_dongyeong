@@ -24,6 +24,6 @@ public class ShopUiManager : MonoBehaviour
     public void UpdatePurchase()
     {
         _myCoin = StateManager.Instance.MyCoin;
-        coinCount.text = "Craken Leg : " + _myCoin.ToString();
+        coinCount.text = "Sharksfin : " + _myCoin.ToString();
     }
 }

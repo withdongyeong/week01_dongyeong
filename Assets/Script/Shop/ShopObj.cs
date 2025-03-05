@@ -4,8 +4,7 @@ using UnityEngine;
 public enum UpgradeItem
 {
     SpearCount = 0,
-    ReroadingTime = 1,
-    Luck = 2
+    ReroadingTime = 1
 }
 
 public class ShopObj : MonoBehaviour
@@ -46,16 +45,6 @@ public class ShopObj : MonoBehaviour
                     break;
                 case UpgradeItem.ReroadingTime:
                     if (StateManager.Instance.ReroadingUpgrade())
-                    {
-                        StartCoroutine(Success());
-                    }
-                    else
-                    {
-                        StartCoroutine(Failure());
-                    }
-                    break;
-                case UpgradeItem.Luck:
-                    if (StateManager.Instance.LuckLevelUpgrade())
                     {
                         StartCoroutine(Success());
                     }
