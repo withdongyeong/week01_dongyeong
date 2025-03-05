@@ -2,22 +2,26 @@ using UnityEngine;
 
 public class StateManager : MonoBehaviour
 {
+    static StateManager _instance;
+    public static StateManager Instance { get { return _instance; } private set { } }
+
     static float _relodaingUpgradeValue = 0.2f;
     static float _reloadingTime = 1;
     static float _luck = 2f;
-    int _spearCount;
+    static int spearCoin = 3;
+    static int powerUpCoin = 2;
+    static int luckCoin = 2;
+    [field: SerializeField] public int SpearCount { get; set; }
     int _reloadUpgradeCount = 1;
-    int _myCoin;
-    float _luckLevel;
+    [field: SerializeField] public int MyCoin { get; private set; } = 10;
+    [field: SerializeField] public float LuckLevel { get; private set; }
 
-
-    public static StateManager Instance { get; private set; }
 
     void Awake()
     {
-        if (Instance == null)
+        if (_instance == null)
         {
-            Instance = this;
+            _instance = this;
             DontDestroyOnLoad(gameObject); // 씬 이동해도 유지
         }
         else
@@ -25,43 +29,53 @@ public class StateManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void BuySpear()
+    public bool BuySpear()
     {
-        _spearCount++;        
+        if (UseCoin(spearCoin)) 
+        { 
+            SpearCount++;
+
+            return true;
+        }
+        return false;
     }
-    public void ReroadingUpgrade()
+    public bool ReroadingUpgrade()
     {
-        _reloadUpgradeCount++;
+        if (UseCoin(powerUpCoin)) 
+        { 
+            _reloadUpgradeCount++;
+            return true;
+        }
+        return false;
     }
-    public int SpearCount()
+    public bool LuckLevelUpgrade()
     {
-        return _spearCount;
+        if (UseCoin(luckCoin)) 
+        {
+            LuckLevel += _luck;
+            return true;
+        }
+        return false;    
     }
     public float ReloadingTime()
     {
         return _reloadingTime + (_relodaingUpgradeValue * _reloadUpgradeCount); // Spear.cs , isReturn 일때만 속도가 증가하도록 변경해야함 
     }
+
     public void Addcoin(int coin)
     {
-        _myCoin += coin;
+        MyCoin += coin;
     }
     public bool UseCoin(int coin)
     {
-        if (_myCoin >= coin)
+        if (MyCoin >= coin)
         {
-            _myCoin -= coin;
-            //업그레이드 성공 매시지
+            MyCoin -= coin;
+            ShopUiManager shopUiManager = GameObject.Find("ShopUIManager").GetComponent<ShopUiManager>();
+            if (shopUiManager != null) shopUiManager.UpdatePurchase();
             return true;
         }
             //업그레이드 실패 메시지
             return false;
-    }
-    public float GetLuckLevel()
-    {
-        return _luckLevel;
-    }
-    public void LuckLevelUpgrade()
-    {
-        _luckLevel += _luck;
     }
 }

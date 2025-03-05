@@ -7,7 +7,7 @@ public class UIManager : MonoBehaviour
     static UIManager _instance;
     public static UIManager Instance { get { return _instance; } private set { } }
 
-    public bool IsReadyUI { get; private set; }
+    //public bool IsReadyUI { get; private set; }
 
     [Header("UI")]
     public GameObject startUI;
@@ -17,14 +17,15 @@ public class UIManager : MonoBehaviour
     public Text gameTime;
     public Text gameLevel;
 
+    public int testNum = 1;
+
     void Awake()
     {
         if(_instance == null)
         {
             _instance = this;
-            DontDestroyOnLoad(gameObject);
+            FindUI();
         }
-        FindUI();
     }
 
     void Start()
@@ -42,12 +43,14 @@ public class UIManager : MonoBehaviour
         gameTime = transform.GetChild(4).GetComponent<Text>();
         gameLevel = transform.GetChild(5).GetComponent<Text>();
 
-        IsReadyUI = true;
+        //IsReadyUI = true;
     }
 
     public void UpdateGameStartUI()
     {
         startUI.SetActive(true);
+        gameTime.gameObject.SetActive(true);
+        gameLevel.gameObject.SetActive(true);
     }
 
     public void UpdateGamePlayingUI()
@@ -68,11 +71,14 @@ public class UIManager : MonoBehaviour
         overUI.SetActive(true);
     }
 
+    public void UpdateGoShopUI()
+    {
+        foreach (Transform ui in transform)
+            ui.gameObject.SetActive(false);
+    }
+
     public void UpdateLevelText(int level)
     {
-        if (gameLevel == null)
-            Debug.Log("¿Øæ∆¿Ã ≥Œ");
-
         gameLevel.text = $"Level {level}";
     }
 
@@ -85,5 +91,19 @@ public class UIManager : MonoBehaviour
     public void GameReplay()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if(scene.name == "IntegrateScene")
+        {
+            FindUI();
+
+            Debug.LogWarning("∞‘¿” æ¿");
+        }
+        else if(scene.name == "SceneShop")
+        {
+            Debug.LogWarning("ªÛ¡° æ¿");
+        }
     }
 }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
@@ -18,16 +20,18 @@ public class PlayerHealth : MonoBehaviour
 
     void Start()
     {
+        if(SceneManager.GetActiveScene().name == "IntegrateScene")
+            healthBarFill = UIManager.Instance.gameObject.transform.GetChild(1).GetChild(1).GetComponent<Image>();
         originalPosition = Camera.main.transform.position; 
         currentHealth = maxHealth; // 시작할 때 최대 체력 설정
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy")) // 적과 충돌하면
-        {
-            TakeDamage(10); // 데미지 받기 (10)
-        }
+        //if (other.CompareTag("Boss")) // 보스와 충돌하면
+        //{
+        //    TakeDamage(10); // 데미지 받기 (10)
+        //}
     }
 
     public void TakeDamage(int damage)
@@ -36,7 +40,7 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("플레이어 체력: " + currentHealth);
         StartCoroutine(ShakeCamera());
 
-        SoundManager.instance.PlaySFX("Clash");
+        //SoundManager.instance.PlaySFX("Clash");
 
         healthBarFill.fillAmount = currentHealth / maxHealth;
 
