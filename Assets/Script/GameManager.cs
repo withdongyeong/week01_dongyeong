@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class Bbb10311031_GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
 
     public GameObject startUI;
@@ -42,7 +42,7 @@ public class Bbb10311031_GameManager : MonoBehaviour
             hardTime = 0;
             Level += 1;
             gameLevel.text = "Level " + Level.ToString();
-            enemySpawner.GetComponent<Bbb10311031_EnemySpawn>().spawnInterval -= 1f;
+            enemySpawner.GetComponent<EnemySpawn>().spawnInterval -= 1f;
         }
         gameTime.text = ((int)playTime).ToString();
         if (playTime > 180) {

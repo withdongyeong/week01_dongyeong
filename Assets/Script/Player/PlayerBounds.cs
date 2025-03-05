@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bbb10311031_PlayerBounds : MonoBehaviour
+public class PlayerBounds : MonoBehaviour
 {
     private Vector2 screenBounds;
     private float objectWidth;

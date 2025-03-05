@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bbb10311031_PlayerMove : MonoBehaviour
+public class PlayerMove : MonoBehaviour
 {
     //public float maxSpeed = 5f; // 최대 속도
     //public float acceleration = 3f; // 가속도

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bbb10311031_ObstacleSpawn : MonoBehaviour
+public class ObstacleSpawn : MonoBehaviour
 {
     public GameObject[] ObstaclePrefab; // 생성할 오브젝트 프리팹
     

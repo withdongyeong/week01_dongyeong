@@ -48,10 +48,10 @@ public class Bbb10311031_Canon : MonoBehaviour
             {
                 if (enemy != null) {
                     Destroy(enemy);
-                    Bbb10311031_SoundManager.instance.PlaySFX("Clash");
+                    SoundManager.instance.PlaySFX("Clash");
                 }
                 else {
-                    Bbb10311031_SoundManager.instance.PlaySFX("SmallCanon");
+                    SoundManager.instance.PlaySFX("SmallCanon");
                 }
                 Destroy(gameObject);
             }

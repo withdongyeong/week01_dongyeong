@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bbb10311031_CloudSpawn : MonoBehaviour
+public class CloudSpawn : MonoBehaviour
 {
     public GameObject objectPrefab; // 생성할 오브젝트 프리팹
     

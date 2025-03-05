@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bbb10311031_ArrowEnemy : MonoBehaviour
+public class ArrowEnemy : MonoBehaviour
 {
     public float speed = 0.2f; // 아래로 이동하는 속도
 
@@ -25,7 +25,7 @@ public class Bbb10311031_ArrowEnemy : MonoBehaviour
     {
         if (EnemyPrefab != null)
         {
-            Bbb10311031_SoundManager.instance.PlaySFX("Arrow");
+            SoundManager.instance.PlaySFX("Arrow");
             Instantiate(EnemyPrefab, transform.position, Quaternion.identity);
         }
     }

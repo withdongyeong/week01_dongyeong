@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bbb10311031_SoundManager : MonoBehaviour
+public class SoundManager : MonoBehaviour
 {
-    public static Bbb10311031_SoundManager instance; // 싱글톤 패턴
+    public static SoundManager instance; // 싱글톤 패턴
     public AudioSource bgmSource; // 배경음
     public AudioSource sfxSource; // 효과음
     public AudioClip[] sfxClips; // 여러 효과음을 저장할 배열

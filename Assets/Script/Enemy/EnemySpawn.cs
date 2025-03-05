@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bbb10311031_EnemySpawn : MonoBehaviour
+public class EnemySpawn : MonoBehaviour
 {
     public GameObject[] EnemyPrefab; // 생성할 오브젝트 프리팹
     

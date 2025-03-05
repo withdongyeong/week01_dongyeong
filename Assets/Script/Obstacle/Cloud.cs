@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bbb10311031_Cloud : MonoBehaviour
+public class Cloud : MonoBehaviour
 {
     public float speed = 2f; // 아래로 이동하는 속도
 

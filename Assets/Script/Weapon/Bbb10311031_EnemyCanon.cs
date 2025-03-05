@@ -48,10 +48,10 @@ public class Bbb10311031_EnemyCanon : MonoBehaviour
             if (fractionOfJourney >= 1f)
             {
                 if (enemy != null) {
-                    enemy.GetComponent<Bbb10311031_PlayerHealth>().TakeDamage(15);
+                    enemy.GetComponent<PlayerHealth>().TakeDamage(15);
                     enemy = null;
                 }
-                Bbb10311031_SoundManager.instance.PlaySFX("SmallCanon");
+                SoundManager.instance.PlaySFX("SmallCanon");
                 Destroy(gameObject);
             }
         }

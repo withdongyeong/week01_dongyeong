@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bbb10311031_PlayerAttack : MonoBehaviour
+public class PlayerAttack : MonoBehaviour
 {
 
     public float attackTimeDelay = 1.5f;
@@ -30,7 +30,7 @@ public class Bbb10311031_PlayerAttack : MonoBehaviour
             attackTime = 0;
             GameObject bullet1 = Instantiate(bullet, transform.position, Quaternion.identity);
             bullet1.GetComponent<Spear>().targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Bbb10311031_SoundManager.instance.PlaySFX("Canon");
+            SoundManager.instance.PlaySFX("Canon");
             StartCoroutine(ShakeCamera());
         }
     }

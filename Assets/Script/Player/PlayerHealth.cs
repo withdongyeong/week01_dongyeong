@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Bbb10311031_PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour
 {
     public Image healthBarFill;
 
@@ -14,7 +14,7 @@ public class Bbb10311031_PlayerHealth : MonoBehaviour
     public float shakeDuration = 0.3f; // 흔들리는 지속 시간
     public float shakeMagnitude = 0.2f; // 흔들림 강도
 
-    public Bbb10311031_GameManager gameManager;
+    public GameManager gameManager;
 
     private Vector3 originalPosition;
 
@@ -38,7 +38,7 @@ public class Bbb10311031_PlayerHealth : MonoBehaviour
         Debug.Log("플레이어 체력: " + currentHealth);
         StartCoroutine(ShakeCamera());
 
-        Bbb10311031_SoundManager.instance.PlaySFX("Clash");
+        SoundManager.instance.PlaySFX("Clash");
 
         healthBarFill.fillAmount = currentHealth / maxHealth;
 
