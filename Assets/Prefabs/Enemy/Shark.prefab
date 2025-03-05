@@ -633,7 +633,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: -11.11, y: 1.81, z: -0.007445986}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.35, y: 0.35, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8319632471369259058}
@@ -741,6 +741,8 @@ MonoBehaviour:
   player: {fileID: 0}
   speed: 1.5
   rotationSpeed: 2
+  collisionMoveDistance: 3
+  secondMoveDistance: 1
 --- !u!256 &744148997120422602
 FrictionJoint2D:
   m_ObjectHideFlags: 0
