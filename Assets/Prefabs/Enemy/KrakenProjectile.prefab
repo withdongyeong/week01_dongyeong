@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2290388699090984317}
   m_Layer: 0
   m_Name: KrakenProjectile
-  m_TagString: Spear
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,8 +96,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.07, y: -0.63721555}
-  m_Size: {x: 0.5, y: 0.57230794}
+  m_Offset: {x: 0.010376811, y: -0.018051118}
+  m_Size: {x: 0.61924636, y: 0.6284191}
   m_Direction: 0
 --- !u!114 &2290388699090984317
 MonoBehaviour:

@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour
     public GameObject clearUI;
     public Text gameTime;
     public Text gameLevel;
+    public GameObject bossUI;
 
     public int testNum = 1;
 
@@ -43,6 +44,8 @@ public class UIManager : MonoBehaviour
         gameTime = transform.GetChild(4).GetComponent<Text>();
         gameLevel = transform.GetChild(5).GetComponent<Text>();
 
+        bossUI = transform.GetChild(6).gameObject;
+
         //IsReadyUI = true;
     }
 
@@ -62,6 +65,7 @@ public class UIManager : MonoBehaviour
     public void UpdateGameClearUI()
     {
         playUI.SetActive(false);
+        bossUI.SetActive(false);
         clearUI.SetActive(true);
     }
 
@@ -69,6 +73,12 @@ public class UIManager : MonoBehaviour
     {
         playUI.SetActive(false);
         overUI.SetActive(true);
+    }
+
+    public void UpdateBossStart()
+    {
+        bossUI.SetActive(true);
+        playUI.SetActive(true);
     }
 
     public void UpdateGoShopUI()

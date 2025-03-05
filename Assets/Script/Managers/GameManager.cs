@@ -139,10 +139,32 @@ public class GameManager : MonoBehaviour
 
 
     #region 보스
+
+    // 보스체력
+    public float maxBossHP = 100;
+    float bossHP;
+    GameObject bossObj;
+    Image bossHealthBarFill;
+
+    // 보스 데미지 받는 함수
+    public void DamagedBossHP(int value)
+    {
+        if (bossHP > 0)
+        {
+            print("보스 데미지 받음");
+            bossHP -= value;
+            bossHealthBarFill.fillAmount = bossHP / maxBossHP;
+        }
+        else BossClear();
+    }
+
     // 보스전 시작
     public void BossStart()
     {
-        UIManager.Instance.UpdateGamePlayingUI();
+        //  보스 UI 활성화
+        UIManager.Instance.UpdateBossStart();
+        bossHealthBarFill = UIManager.Instance.gameObject.transform.GetChild(6).GetChild(1).GetComponent<Image>();  // 보스 체력바
+        bossHP = maxBossHP;
 
         // 상어 소환 중지
         if (spawnIntervalCorouineList.Count >= 2)
@@ -153,18 +175,20 @@ public class GameManager : MonoBehaviour
 
         // 크라켄 소환
         isboss = true;
-        Instantiate(spawnPrefabList[2]);
+       
+        bossObj = Instantiate(spawnPrefabList[2]);
     }
 
     // 보스 클리어시
     public void BossClear()
     {
         isGameOver = true;
-
+        if (bossObj != null) Destroy(bossObj);
         //  UI 활성화
+        UIManager.Instance.UpdateGameClearUI();
+
         // (구현 예정)
         Debug.Log("보스 클리어~");
-
 
 
         Invoke("GoShopScene", 3f);
