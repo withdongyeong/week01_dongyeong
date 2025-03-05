@@ -45,16 +45,16 @@ public class StateManager : MonoBehaviour
     {
         _myCoin += coin;
     }
-    public void UseCoin(int coin)
+    public bool UseCoin(int coin)
     {
         if (_myCoin >= coin)
         {
             _myCoin -= coin;
+            //업그레이드 성공 매시지
+            return true;
         }
-        if (coin > _myCoin)
-        {
-            // 코인이 부족할때. 함수 추가
-        }
+            //업그레이드 실패 메시지
+            return false;
     }
     public float GetLuckLevel()
     {

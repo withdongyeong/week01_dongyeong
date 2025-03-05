@@ -73,11 +73,22 @@ public class PlayerMove : MonoBehaviour
             float accelerationRate = (moveInput > 0) ? acceleration : deceleration;
             float movementForce = speedDiff * accelerationRate;
             rb.AddForce(transform.up * movementForce, ForceMode2D.Force);
+
+            if (Mathf.Abs(currentSpeed) < maxSpeed || Mathf.Sign(targetSpeed) != Mathf.Sign(currentSpeed))
+            {
+                rb.AddForce(transform.up * movementForce, ForceMode2D.Force);
+            }
         }
         else
         {
             // 감속 시 관성을 줄이기 위한 감속 처리
             rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
+        }
+
+        // 속도 제한 적용
+        if (rb.linearVelocity.magnitude > maxSpeed)
+        {
+            rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
         }
 
         //// 회전 처리
