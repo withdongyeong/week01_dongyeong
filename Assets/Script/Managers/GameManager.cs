@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
 
     [Header("컨텐츠")]
     public bool isGameOver;
-    public float hardTime = 0;
     public float playTime = 0;
     public int Level = 1;
 
@@ -40,8 +39,8 @@ public class GameManager : MonoBehaviour
 
         UpdateTimer();
 
-        if (hardTime > 30)
-            StageLevelUp();
+        if (playTime > 60)
+            BossStart();
 
         if (playTime > 7) // 7초 초과부터 게임 시작
         {
@@ -49,7 +48,7 @@ public class GameManager : MonoBehaviour
         }
         else if (playTime > 180)
         {
-            if(UIManager.Instance.IsReadyUI)
+            if (UIManager.Instance.IsReadyUI)
                 UIManager.Instance.UpdateGameClearUI();
             return;
         }
@@ -58,32 +57,69 @@ public class GameManager : MonoBehaviour
     public void UpdateTimer()
     {
         playTime += Time.deltaTime;
-        hardTime += Time.deltaTime;
         UIManager.Instance.UpdateTimeText((int)playTime);
     }
 
-    public void StageLevelUp()
-    {
-        hardTime = 0;
-        Level += 1;
-        UIManager.Instance.UpdateLevelText(Level);
-        //enemySpawner.GetComponent<EnemySpawn>().spawnInterval -= 1f;
-    }
+    //public void StageLevelUp()
+    //{
+    //    Level += 1;
+    //    UIManager.Instance.UpdateLevelText(Level);
+    //    //enemySpawner.GetComponent<EnemySpawn>().spawnInterval -= 1f;
+    //}
 
+    // 게임 시작
     public void GameStart()
     {
-        enemySpawner.SetActive(false);
+        isGameOver = false;
+        if (enemySpawner != null) enemySpawner.SetActive(false);
     }
 
+    // 게임 플레이 중 
     public void GamePlaying()
     {
-        UIManager.Instance.UpdateGamePlayingUI();
-        enemySpawner.SetActive(true);
+        UIManager.Instance.EndGameStartUI();
+        if (enemySpawner != null) enemySpawner.SetActive(true);
     }
 
+
+    // 게임오버 됐을 때
     public void GameOver()
     {
         UIManager.Instance.UpdateGameOverUI();
+        if (enemySpawner != null) enemySpawner.SetActive(false);
         isGameOver = true;
+    }
+
+    // 상점 씬으로 넘어감
+    public void GoShop()
+    {
+        UIManager.Instance.UpdateGoShopUI();
+        SceneManager.LoadScene(1);
+    }
+
+    // 플레이씬으로 넘어감
+    public void GoGame()
+    {
+        SceneManager.LoadScene(0);
+        GameStart();
+    }
+
+    // 보스전 시작
+    public void BossStart()
+    {
+
+        enemySpawner.SetActive(false);
+        UIManager.Instance.UpdateGamePlayingUI();
+        // 보스 스폰
+
+        //UIManager.Instance.UpdateLevelText(Level);
+    }
+
+    // 보스 클리어시
+    public void BossClear()
+    {
+        isGameOver = true;
+        // 보스 클리어 UI 활성화
+
     }
 }

@@ -50,6 +50,11 @@ public class UIManager : MonoBehaviour
         startUI.SetActive(true);
     }
 
+    public void EndGameStartUI()
+    {
+        startUI.SetActive(false);
+    }
+
     public void UpdateGamePlayingUI()
     {
         startUI.SetActive(false);
@@ -66,6 +71,13 @@ public class UIManager : MonoBehaviour
     {
         playUI.SetActive(false);
         overUI.SetActive(true);
+    }
+
+    public void UpdateGoShopUI()
+    {
+        startUI.SetActive(false);
+        overUI.SetActive(false);
+        clearUI.SetActive(false);
     }
 
     public void UpdateLevelText(int level)
