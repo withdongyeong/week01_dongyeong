@@ -28,10 +28,10 @@ public class PlayerHealth : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        //if (other.CompareTag("Boss")) // 보스와 충돌하면
-        //{
-        //    TakeDamage(10); // 데미지 받기 (10)
-        //}
+        if (other.CompareTag("Boss")) // 보스와 충돌하면
+        {
+            TakeDamage(10); // 데미지 받기 (10)
+        }
     }
 
     public void TakeDamage(int damage)
