@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.LightTransport;
+using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 
 public class Spear : MonoBehaviour
@@ -7,24 +8,22 @@ public class Spear : MonoBehaviour
     public float speed = 6f; // 이동 속도
     public float returnSpeed = 3f;
     public Vector3 targetPosition; // 클릭한 위치
-    public Vector3 startPosition; // 시작 위
-    public float acceleration = 2f; // 가속도
-    public GameObject tail;    // 끈 연결 부분
+    public Vector3 startPosition; // 시작 위치 
 
+    public float acceleration = 2f; // 가속도
     private float currentSpeed = 0f; // 현재 속도
 
     private Vector3 originalScale; // 원래 크기
     private bool isMoving = false;
     private bool isReturn = false;
     private float journeyLength;
+    private float reloadingTime;
 
     float distanceCovered = 0f;
     float fractionOfJourney = 0f;
 
     GameObject enemy;
     GameObject playerObj;
-   
-    Transform[] points = new Transform[2];
 
     void Start()
     {
@@ -32,17 +31,10 @@ public class Spear : MonoBehaviour
         startPosition = transform.position;
         targetPosition = new Vector3(targetPosition.x, targetPosition.y, 0f); // 3D 좌표값 2D로 변경
         journeyLength = Vector3.Distance(startPosition, targetPosition);
-        SetTail();
         isMoving = true;
     }
 
-    // 꼬리 연결
-    void SetTail()
-    {
-        points[0] = playerObj.transform;
-        points[1] = gameObject.transform;
-        tail.GetComponent<LineController>().SetUpLine(points);
-    }
+
 
     void Update()
     {
@@ -75,10 +67,12 @@ public class Spear : MonoBehaviour
         else if (isReturn)
         {
             transform.up = Vector3.Lerp(transform.up, (targetPosition - playerObj.transform.position).normalized, Time.deltaTime);
+            //transform.up = (targetPosition - playerObj.transform.position).normalized; // 작살 물체 반대방향 
             transform.position = Vector3.MoveTowards(transform.position, playerObj.transform.position, speed * Time.deltaTime);
 
-            currentSpeed += acceleration * Time.deltaTime; // 시간이 지날수록 속도 증가
+            currentSpeed += acceleration * reloadingTime * Time.deltaTime; // 시간이 지날수록 속도 증가
             transform.position = Vector3.MoveTowards(transform.position, playerObj.transform.position, currentSpeed * Time.deltaTime);
+            SpearRotation();
 
             if (Vector3.Distance(transform.position, playerObj.transform.position) < 0.1f)
             {
@@ -93,11 +87,6 @@ public class Spear : MonoBehaviour
         {
             enemy = other.gameObject;
         }
-        if (other.CompareTag("Island")) // 섬과 충돌하면
-        {
-            isReturn = true;
-            isMoving = false;
-        }
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -106,5 +95,11 @@ public class Spear : MonoBehaviour
         {
             enemy = null;
         }
+    }
+    void SpearRotation()
+    {
+        Vector2 direction = transform.position - playerObj.transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
     }
 }
