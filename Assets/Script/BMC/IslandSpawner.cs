@@ -8,11 +8,9 @@ public class IslandSpawner : MonoBehaviour
 
     public BoxCollider2D areaCollider;
 
-
-    public LayerMask islandLayerMask;
-
-
     public Vector2 screenArea;
+
+    [SerializeField] GameObject[] IslandPrefabArray = new GameObject[5];
 
     void Start()
     {
@@ -23,6 +21,8 @@ public class IslandSpawner : MonoBehaviour
 
         // 구역 크기
         areaCollider.size = screenArea;
+
+        Debug.Log(areaCollider.size);
 
         SpawnIsland();
     }
@@ -35,22 +35,24 @@ public class IslandSpawner : MonoBehaviour
             int attempts = 0;
             do
             {
-                float x = Random.Range(-areaCollider.size.x, areaCollider.size.x / 2);
-                float y = Random.Range(-areaCollider.size.y / 2, areaCollider.size.y / 2);
-                spawnPosition = new Vector2(x, y) + (Vector2)transform.position;
-                //spawnPosition = new Vector2(x, y);
+                float x = Random.Range(-areaCollider.size.x, areaCollider.size.x);
+                float y = Random.Range(-areaCollider.size.y, areaCollider.size.y);
+
+                // 원점 기준으로 좌표 설정
+                spawnPosition = new Vector2(x, y);
                 attempts++;
             }
-            while (Physics2D.OverlapCircle(spawnPosition, minDistance, islandLayerMask) != null && attempts < 100);
+            while (Physics2D.OverlapCircle(spawnPosition, minDistance) != null && attempts < 100);
 
             if(attempts < 100)
             {
-                Instantiate(islandPrefab, spawnPosition, Quaternion.identity);
+                int randomIdx = Random.Range(0, 5);
+                Instantiate(IslandPrefabArray[randomIdx], spawnPosition, Quaternion.identity);
             }
         }
     }
 
-    private void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         Color color = new Color(1, 0, 0, 0.25f);
         Gizmos.color = color;
