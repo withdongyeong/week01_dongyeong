@@ -41,12 +41,13 @@ public class PlayerMove : MonoBehaviour
 
     public float maxSpeed = 5f; // 최대 속도
     public float acceleration = 3f; // 가속도
-    public float deceleration = 5f; // 감속도
+    
     public float turnSpeed = 100f; // 회전 속도 (높을수록 빠르게 회전)
 
     private Rigidbody2D rb;
     private float moveInput;
     private float turnInput;
+    float deceleration = 20f; // 감속도
 
     void Start()
     {
@@ -84,7 +85,7 @@ public class PlayerMove : MonoBehaviour
             rb.angularVelocity = 0;
             // 감속 시 관성을 줄이기 위한 감속 처리
             rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
-      
+            print(deceleration);
         }
 
         // 속도 제한 적용
