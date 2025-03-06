@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public int startTime = 5;
     public bool isStartGame = false;
     GameObject playerObject;
+    public float sharkSpawnInterval = 2f;
 
     [Header("소환")]
     public List<Transform> spawnTransformList = new List<Transform>();         // 프리팹 소환 장소 리스트,           0: 구름, 1: 상어, 2: 크라켄
@@ -92,7 +93,7 @@ public class GameManager : MonoBehaviour
         // 구름 소환
         if (spawnIntervalCorouineList.Count == 0)
         {
-            spawnIntervalCorouineList.Add(StartCoroutine(SpawnIntervalPrefabCoroutine(spawnPrefabList[0], 10.0f)));
+            spawnIntervalCorouineList.Add(StartCoroutine(SpawnIntervalPrefabCoroutine(spawnPrefabList[0], 10.0f, false)));
             Debug.Log($"구름 코루틴 추가, 현재 코루틴 개수: {spawnIntervalCorouineList.Count}");
         }
     }
@@ -106,7 +107,7 @@ public class GameManager : MonoBehaviour
         // 상어 소환
         if (spawnIntervalCorouineList.Count == 1)
         {
-            spawnIntervalCorouineList.Add(StartCoroutine(SpawnIntervalPrefabCoroutine(spawnPrefabList[1], 2.0f)));
+            spawnIntervalCorouineList.Add(StartCoroutine(SpawnIntervalPrefabCoroutine(spawnPrefabList[1], sharkSpawnInterval, true)));
 
             Debug.Log($"상어 코루틴 추가, 현재 코루틴 개수: {spawnIntervalCorouineList.Count}");
         }
@@ -165,8 +166,11 @@ public class GameManager : MonoBehaviour
         playerObject = GameObject.FindGameObjectWithTag("Player");
         playerObject.transform.Find("Whale").gameObject.SetActive(false);
 
-        // 모든 상어 삭제
-        SharkDestory();
+        SharkDestory(); // 상어 삭제
+
+        // 남은 미끼 체력을 보스전 시작시 적용
+        playerObject.GetComponent<PlayerHealth>().UpdateCurrentHP(playerObject.transform.Find("Whale").GetComponent<Whale>().currentHealth);
+        
 
         //  보스 UI 활성화
         UIManager.Instance.UpdateBossStart();
@@ -203,17 +207,41 @@ public class GameManager : MonoBehaviour
     #endregion
 
     // 일정 주기로 계속 프리팹 소환
-    IEnumerator SpawnIntervalPrefabCoroutine(GameObject prefab, float interval)
+    IEnumerator SpawnIntervalPrefabCoroutine(GameObject prefab, float interval, bool allowAllDirection)
     {
         while (true)
         {
-            int randomPosX = Random.Range(-7, 7);
-            GameObject go = Instantiate(prefab, new Vector3(randomPosX, 7, 0), Quaternion.identity);
+            if (allowAllDirection) 
+            {
+                int direction = Random.Range(0, 4);
+                Vector3 spawnPos = Vector3.zero;
 
-            if (prefab.name == "Shark")
-                sharkList.Add(go);
+                switch (direction) {
+                    case 0: // 위
+                        spawnPos = new Vector3(Random.Range(-7, 7), 9, 0);
+                        break;
+                    case 1: // 아래
+                        spawnPos = new Vector3(Random.Range(-7, 7), -9, 0);
+                        break;
+                    case 2: // 왼쪽 (화면 바깥)
+                        spawnPos = new Vector3(-18, Random.Range(-7, 7), 0); 
+                        break;
+                    case 3: // 오른쪽 (화면 바깥)
+                        spawnPos = new Vector3(18, Random.Range(-7, 7), 0);  
+                        break;
+                }
 
-            yield return new WaitForSeconds(interval);
+                GameObject go = Instantiate(prefab, spawnPos, Quaternion.identity);
+                if (prefab.name == "Shark")
+                    sharkList.Add(go);
+                yield return new WaitForSeconds(interval);
+            } 
+            else 
+            {
+                int randomPosX = Random.Range(-7, 7);
+                Instantiate(prefab, new Vector3(randomPosX, 7, 0), Quaternion.identity);
+                yield return new WaitForSeconds(interval);
+            }
         }
     }
 

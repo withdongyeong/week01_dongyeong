@@ -1,19 +1,18 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 
 public class Spear : MonoBehaviour
 {
-    public float speed = 6f; // ÀÌµ¿ ¼Óµµ
+    public float speed = 6f; // ï¿½Ìµï¿½ ï¿½Óµï¿½
     public float returnSpeed = 6f;
-    public Vector3 targetPosition; // Å¬¸¯ÇÑ À§Ä¡
-    public Vector3 startPosition; // ½ÃÀÛ À§Ä¡ 
-    public GameObject tail;    // ²ö ¿¬°á ºÎºÐ
+    public Vector3 targetPosition; // Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+    public Vector3 startPosition; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ 
+    public GameObject tail;    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½
 
-    public float acceleration = 2f; // °¡¼Óµµ
-    private float currentSpeed = 0f; // ÇöÀç ¼Óµµ
+    public float acceleration = 2f; // ï¿½ï¿½ï¿½Óµï¿½
+    private float currentSpeed = 0f; // ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½
 
-    private Vector3 originalScale; // ¿ø·¡ Å©±â
+    private Vector3 originalScale; // ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½
     private bool isMoving = false;
     private bool isReturn = false;
     private float reloadingTime;
@@ -35,8 +34,8 @@ public class Spear : MonoBehaviour
     void Start()
     {
         startPosition = transform.position;
-        targetPosition = new Vector3(targetPosition.x, targetPosition.y, 0f); // 3D ÁÂÇ¥°ª 2D·Î º¯°æ
-        returnSpeed = returnSpeed * StateManager.Instance.ReloadingTime(); // µ¹¾Æ¿À´Â ¼Óµµ
+        targetPosition = new Vector3(targetPosition.x, targetPosition.y, 0f); // 3D ï¿½ï¿½Ç¥ï¿½ï¿½ 2Dï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        returnSpeed = returnSpeed * StateManager.Instance.ReloadingTime(); // ï¿½ï¿½ï¿½Æ¿ï¿½ï¿½ï¿½ ï¿½Óµï¿½
         SetTail();
 
         isMoving = true;
@@ -56,12 +55,12 @@ public class Spear : MonoBehaviour
 
         if (isMoving)
         {
-            transform.up = (targetPosition - startPosition).normalized; // ÀÛ»ì ¹°Ã¼ ¹æÇâ
+            transform.up = (targetPosition - startPosition).normalized; // ï¿½Û»ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½
 
-            // ÀÌµ¿
+            // ï¿½Ìµï¿½
             transform.position = Vector3.Lerp(transform.position, targetPosition, speed * Time.deltaTime);
 
-            // ¸ñÀûÁö µµÂøÇÏ¸é ¸ØÃã
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
             {
                 if (enemy != null)
@@ -73,7 +72,7 @@ public class Spear : MonoBehaviour
                 {
                     //SoundManager.instance.PlaySFX("SmallCanon");
                 }
-                isReturn = true; // ³¡±îÁö µµ´ÞÇßÀ½
+                isReturn = true; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 isMoving = false;
                 GetComponent<CapsuleCollider2D>().enabled = false;
                 //Destroy(gameObject);
@@ -97,22 +96,22 @@ public class Spear : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy") && isMoving) // Àû°ú Ãæµ¹ÇÏ¸é
+        if (other.CompareTag("Enemy") && isMoving) // ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ï¿½Ï¸ï¿½
         {
             StateManager.Instance.CoinPlus();
             Destroy(other.gameObject);
             ReturnStart();
 
-            // (ÀÓ½Ã)
+            // (ï¿½Ó½ï¿½)
             if (other.GetComponent<KrakenMove>() != null)
                 GameManager.Instance.GoShopScene();
 
         }
-        if (other.CompareTag("Obstacle") && isMoving) // Àå¾Ö¹°°ú Ãæµ¹ÇÏ¸é
+        if (other.CompareTag("Obstacle") && isMoving) // ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ ï¿½æµ¹ï¿½Ï¸ï¿½
         {
             ReturnStart();
         }
-        if (other.CompareTag("Boss") && isMoving) // º¸½º°ú Ãæµ¹ÇÏ¸é
+        if (other.CompareTag("Boss") && isMoving) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ï¿½Ï¸ï¿½
         {
             GameManager.Instance.DamagedBossHP(2);
             ReturnStart();
@@ -121,12 +120,12 @@ public class Spear : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && isMoving) // Àû°ú Ãæµ¹ÇÏ¸é
+        if (collision.gameObject.CompareTag("Enemy") && isMoving) // ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ï¿½Ï¸ï¿½
         {
             Destroy(collision.gameObject);
             ReturnStart();
         }
-        if (collision.gameObject.CompareTag("Obstacle") && isMoving) // Àå¾Ö¹°°ú Ãæµ¹ÇÏ¸é
+        if (collision.gameObject.CompareTag("Obstacle") && isMoving) // ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ ï¿½æµ¹ï¿½Ï¸ï¿½
         {
             ReturnStart();
         }
@@ -139,7 +138,7 @@ public class Spear : MonoBehaviour
         transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
     }
 
-    // µ¹¾Æ¿À±â ½ÃÀÛÇÒ ¶§ Ãæµ¹ ÆÇÁ¤ ¾È³ªµµ·Ï ¼³Á¤
+    // ï¿½ï¿½ï¿½Æ¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½æµ¹ ï¿½ï¿½ï¿½ï¿½ ï¿½È³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     void ReturnStart()
     {
         isMoving = false;
