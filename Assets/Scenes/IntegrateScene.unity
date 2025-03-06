@@ -4324,7 +4324,7 @@ MonoBehaviour:
   isExistHead: 1
   isTakeDamaged: 0
   unattackTimer: 0
-  unattackTime: 3
+  unattackTime: 0.5
 --- !u!4 &3474749643674380256
 Transform:
   m_ObjectHideFlags: 0

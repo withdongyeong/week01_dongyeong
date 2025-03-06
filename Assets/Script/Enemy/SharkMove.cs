@@ -17,10 +17,14 @@ public class SharkMove : MonoBehaviour
         if (target == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-            Transform whaleTransform = playerObj.transform.GetChild(5);
-            if (whaleTransform != null)
+
+            if (playerObj != null)
             {
-                target = whaleTransform;
+                Transform whaleTransform = playerObj.transform.GetChild(5);
+                if (whaleTransform != null)
+                {
+                    target = whaleTransform;
+                }
             }
         }
     }

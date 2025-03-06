@@ -14,7 +14,7 @@ public class Whale : MonoBehaviour
 
     public bool isTakeDamaged = false;
     public float unattackTimer = 0f; 
-    public float unattackTime = 1.5f;
+    public float unattackTime = 0.75f;
 
     void Start()
     {
@@ -52,16 +52,16 @@ public class Whale : MonoBehaviour
             float floatHealth = (float)currentHealth;
             floatHealth /= maxHealth;
 
-            isExistTail = (floatHealth >= 0.8f);
-            isExistBody = (floatHealth >= 0.4f);
+            isExistTail = (floatHealth >= 0.74f);
+            isExistBody = (floatHealth >= 0.48f);
             isExistHead = (floatHealth >= 0f);
 
-            if (isExistTail && floatHealth <= 0.8f)
+            if (isExistTail && floatHealth <= 0.74f)
             {
                 isExistTail = false;
                 DisablePart();
             }
-            else if (isExistBody && floatHealth <= 0.4f)
+            else if (isExistBody && floatHealth <= 0.48f)
             {
                 isExistBody = false;
                 DisablePart();
@@ -103,7 +103,7 @@ public class Whale : MonoBehaviour
                     unattackTimer = 0;
                     isTakeDamaged = true;
                     shark.EatWhale();
-                    TakeDamage(5);
+                    TakeDamage(13);
                 }
             }
         }
