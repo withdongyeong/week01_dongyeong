@@ -24,7 +24,7 @@ public class Bbb10311031_PlayerAttack : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && attackCount > 0)
         {
             AttackCountDown();
-            GameObject bulletObj = Instantiate(bullet, transform.position, Quaternion.identity);
+            GameObject bulletObj = Instantiate(bullet, transform.position,Quaternion.Euler(transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition)));
             bulletObj.GetComponent<Spear>().targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             if(cameraController != null)
