@@ -57,6 +57,12 @@ public class PlayerHealth : MonoBehaviour
         Destroy(gameObject); // 플레이어 삭제
     }
 
+    public void UpdateCurrentHP(int value)
+    {
+        currentHealth = value;
+        healthBarFill.fillAmount = currentHealth / maxHealth;
+    }
+
 
     IEnumerator ShakeCamera()
     {
@@ -75,4 +81,5 @@ public class PlayerHealth : MonoBehaviour
 
         Camera.main.transform.position = originalPosition; // 원래 위치로 복귀
     }
+    
 }

@@ -164,6 +164,10 @@ public class GameManager : MonoBehaviour
         playerObject = GameObject.FindGameObjectWithTag("Player");
         playerObject.transform.Find("Whale").gameObject.SetActive(false);
 
+        // 남은 미끼 체력을 보스전 시작시 적용
+        playerObject.GetComponent<PlayerHealth>().UpdateCurrentHP(playerObject.transform.Find("Whale").GetComponent<Whale>().currentHealth);
+        
+
         //  보스 UI 활성화
         UIManager.Instance.UpdateBossStart();
         bossHealthBarFill = UIManager.Instance.gameObject.transform.GetChild(6).GetChild(1).GetComponent<Image>();  // 보스 체력바
