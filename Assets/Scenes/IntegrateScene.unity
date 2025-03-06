@@ -2314,8 +2314,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1.2
-  m_Text: "W,S : \uC774\uB3D9\nA,D : \uD68C\uC804\nLeft Click : \uACF5\uACA9\n\n\uBBF8\uB07C\uB97C
-    \uC9C0\uCF1C\uB77C"
+  m_Text: "Kraken Hunter \n\nW,S : Move\nA,D : Rotate\nLeft Click : Attack\n\nDefense
+    And Hunt"
 --- !u!222 &1209819529
 CanvasRenderer:
   m_ObjectHideFlags: 0
