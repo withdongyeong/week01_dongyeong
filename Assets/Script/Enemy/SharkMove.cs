@@ -3,33 +3,34 @@ using System.Collections;
 
 public class SharkMove : MonoBehaviour
 {
-    public Transform player; // 플레이어의 Transform
-    public Transform whale;
+    public Transform target; // 플레이어의 Transform
     public float speed = 3f; // 이동 속도
     public float rotationSpeed = 0.5f; // 회전 속도
     public float collisionMoveDistance = 3f; // 충돌 후 이동 거리
     public float secondMoveDistance = 1f; // 두 번째 이동 거리
     private bool isReversing = false;
 
+    public ParticleSystem bloodParticle;
+
     void Start()
     {
-        if (player == null)
+        if (target == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-            if (playerObj != null)
+            Transform whaleTransform = playerObj.transform.GetChild(5);
+            if (whaleTransform != null)
             {
-                player = playerObj.transform;
-                whale = player.GetChild(5);
+                target = whaleTransform;
             }
         }
     }
 
     void Update()
     {
-        if (!isReversing && player != null)
+        if (!isReversing && target != null)
         {
             // 플레이어 방향으로 이동
-            Vector2 direction = (whale.position - transform.position).normalized;
+            Vector2 direction = (target.position - transform.position).normalized;
             float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             float angle = Mathf.LerpAngle(transform.eulerAngles.z, targetAngle, rotationSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Euler(0, 0, angle); // 부드러운 회전 적용
@@ -103,5 +104,11 @@ public class SharkMove : MonoBehaviour
 
         // 이동이 끝나면 원래 플레이어를 추적하는 상태로 돌아감
         isReversing = false;
+    }
+
+    public void EatWhale()
+    {
+        if(bloodParticle != null)
+            bloodParticle.Play();
     }
 }

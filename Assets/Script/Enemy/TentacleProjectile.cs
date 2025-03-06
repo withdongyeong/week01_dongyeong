@@ -82,12 +82,15 @@ public class TentacleProjectile : MonoBehaviour
         }
         else if (isReturn)
         {
-            transform.up = Vector3.Lerp(transform.up, (targetPosition - bossObj.transform.position).normalized, Time.deltaTime);
-            transform.position = Vector3.MoveTowards(transform.position, bossObj.transform.position, returnSpeed * Time.deltaTime);
-
-            if (Vector3.Distance(transform.position, bossObj.transform.position) < 0.1f)
+            if (bossObj != null)
             {
-                Destroy(gameObject);
+                transform.up = Vector3.Lerp(transform.up, (targetPosition - bossObj.transform.position).normalized, Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, bossObj.transform.position, returnSpeed * Time.deltaTime);
+
+                if (Vector3.Distance(transform.position, bossObj.transform.position) < 0.1f)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }

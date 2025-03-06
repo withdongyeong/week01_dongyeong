@@ -23,8 +23,7 @@ public class GameManager : MonoBehaviour
     public List<Transform> spawnTransformList = new List<Transform>();         // 프리팹 소환 장소 리스트,           0: 구름, 1: 상어, 2: 크라켄
     public List<GameObject> spawnPrefabList = new List<GameObject>();          // 프리팹 리스트,                     0: 구름, 1: 상어, 2: 크라켄
     public List<Coroutine> spawnIntervalCorouineList;                          // 프리팹 주기적 소환 코루틴 리스트,  0: 구름, 1: 상어
-    public bool isboss;
-
+    public List<GameObject> sharkList = new List<GameObject>();
     void Awake()
     {
         if (_instance == null)
@@ -49,7 +48,7 @@ public class GameManager : MonoBehaviour
         if(SceneManager.GetActiveScene().name == "IntegrateScene")
             UpdateTimer();
 
-        if (playTime > 15 && !isboss)
+        if (playTime > bossSpawnTime && !isboss)
             BossStart();
 
         // 게임 시작
@@ -146,6 +145,8 @@ public class GameManager : MonoBehaviour
     float bossHP;
     GameObject bossObj;
     Image bossHealthBarFill;
+    public bool isboss;
+    public float bossSpawnTime = 45;
 
     // 보스 데미지 받는 함수
     public void DamagedBossHP(int value)
@@ -165,13 +166,15 @@ public class GameManager : MonoBehaviour
         playerObject = GameObject.FindGameObjectWithTag("Player");
         playerObject.transform.Find("Whale").gameObject.SetActive(false);
 
+        SharkDestory(); // 상어 삭제
+
         // 남은 미끼 체력을 보스전 시작시 적용
         playerObject.GetComponent<PlayerHealth>().UpdateCurrentHP(playerObject.transform.Find("Whale").GetComponent<Whale>().currentHealth);
         
 
         //  보스 UI 활성화
         UIManager.Instance.UpdateBossStart();
-        bossHealthBarFill = UIManager.Instance.gameObject.transform.GetChild(6).GetChild(1).GetComponent<Image>();  // 보스 체력바
+        bossHealthBarFill = UIManager.Instance.gameObject.transform.GetChild(5).GetChild(1).GetComponent<Image>();  // 보스 체력바
         bossHP = maxBossHP;
 
         // 상어 소환 중지
@@ -208,7 +211,8 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            if (allowAllDirection) {
+            if (allowAllDirection) 
+            {
                 int direction = Random.Range(0, 4);
                 Vector3 spawnPos = Vector3.zero;
 
@@ -227,14 +231,24 @@ public class GameManager : MonoBehaviour
                         break;
                 }
 
-                Instantiate(prefab, spawnPos, Quaternion.identity);
+                GameObject go = Instantiate(prefab, spawnPos, Quaternion.identity);
+                if (prefab.name == "Shark")
+                    sharkList.Add(go);
                 yield return new WaitForSeconds(interval);
             } 
-            else {
+            else 
+            {
                 int randomPosX = Random.Range(-7, 7);
                 Instantiate(prefab, new Vector3(randomPosX, 7, 0), Quaternion.identity);
                 yield return new WaitForSeconds(interval);
             }
         }
+    }
+
+    public void SharkDestory()
+    {
+        foreach(GameObject shark in sharkList)
+            Destroy(shark);
+        sharkList.Clear();
     }
 }

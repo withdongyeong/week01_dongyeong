@@ -16,8 +16,8 @@ public class UIManager : MonoBehaviour
     public Button RestartBtn;
     public GameObject clearUI;
     public Text gameTime;
-    public Text gameLevel;
     public GameObject bossUI;
+    public Text shaksfinUI;
 
 
     public int testNum = 1;
@@ -33,7 +33,12 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        UpdateGameStartUI();
+        UpdateGameStartUI();        
+    }
+
+    void Update()
+    {
+        UpdateShaksfinUI();
     }
 
     void FindUI()
@@ -51,9 +56,9 @@ public class UIManager : MonoBehaviour
 
 
         gameTime = transform.GetChild(4).GetComponent<Text>();
-        gameLevel = transform.GetChild(5).GetComponent<Text>();
 
-        bossUI = transform.GetChild(6).gameObject;
+        bossUI = transform.GetChild(5).gameObject;
+        shaksfinUI = transform.GetChild(6).GetComponent<Text>();
 
         //IsReadyUI = true;
     }
@@ -62,13 +67,14 @@ public class UIManager : MonoBehaviour
     {
         startUI.SetActive(true);
         gameTime.gameObject.SetActive(true);
-        gameLevel.gameObject.SetActive(true);
+        shaksfinUI.gameObject.SetActive(true);
     }
 
     public void UpdateGamePlayingUI()
     {
         startUI.SetActive(false);
         playUI.SetActive(true);
+        shaksfinUI.gameObject.SetActive(true);
     }
 
     public void UpdateGameClearUI()
@@ -90,15 +96,16 @@ public class UIManager : MonoBehaviour
         playUI.SetActive(true);
     }
 
+    public void UpdateShaksfinUI()
+    {
+        Debug.Log($"¼¡½ºÇÉ ui: {StateManager.Instance.MyCoin}");
+        shaksfinUI.text = $"Shaksfin: {StateManager.Instance.MyCoin}";
+    }
+
     public void UpdateGoShopUI()
     {
         foreach (Transform ui in transform)
             ui.gameObject.SetActive(false);
-    }
-
-    public void UpdateLevelText(int level)
-    {
-        gameLevel.text = $"Level {level}";
     }
 
     public void UpdateTimeText(int playTime)
