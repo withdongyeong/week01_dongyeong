@@ -8,8 +8,8 @@ public class StateManager : MonoBehaviour
     static float _relodaingUpgradeValue = 0.2f;
     static float _reloadingTime = 1;
     // static float _luck = 2f;
-    static int spearCoin = 16;
-    static int powerUpCoin = 4;
+    static int spearCoin = 32;
+    static int powerUpCoin = 8;
     // static int luckCoin = 2;
     [field: SerializeField] public int SpearCount { get; set; }
     int _reloadUpgradeCount = 1;
@@ -64,7 +64,7 @@ public class StateManager : MonoBehaviour
 
     public void CoinPlus()
     {
-        MyCoin ++ ;
+        MyCoin++;
     }
     public bool UseCoin(int coin)
     {
