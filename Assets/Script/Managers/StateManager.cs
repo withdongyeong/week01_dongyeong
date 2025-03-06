@@ -64,7 +64,7 @@ public class StateManager : MonoBehaviour
 
     public void CoinPlus()
     {
-        MyCoin ++ ;
+        MyCoin++;
     }
     public bool UseCoin(int coin)
     {
