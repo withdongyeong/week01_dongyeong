@@ -233,6 +233,7 @@ MonoBehaviour:
   Level: 1
   startTime: 5
   isStartGame: 0
+  sharkSpawnInterval: 1
   spawnTransformList: []
   spawnPrefabList:
   - {fileID: 6401930838165955585, guid: e9762b0bd924cd847bf01817005feb78, type: 3}
