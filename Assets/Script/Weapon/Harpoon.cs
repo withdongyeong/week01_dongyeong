@@ -8,6 +8,7 @@ public class Harpoon : MonoBehaviour
     public float speed = 6f;            // 발사 시 이동 속도
     public float returnSpeed = 6f;      // 회수 시 이동 속도
     public float pullSpeed = 1f;        // 몬스터 당기는 속도
+    public float playerPullSpeed = 0.5f; // 플레이어가 몬스터 쪽으로 끌리는 속도
 
     [Header("Positions")]
     public Vector3 targetPosition;      // 발사 목표 위치
@@ -33,7 +34,7 @@ public class Harpoon : MonoBehaviour
     // 몬스터와 충돌 시, 작살과 몬스터 사이의 오프셋
     private Vector3 hitOffset;
 
-    // 라인 렌더러 연결용 배열 (여기서는 start는 작살의 위치, end는 플레이어)
+    // 라인 렌더러 연결용 배열 (여기서는 start는 작살의 transform, end는 플레이어)
     Transform[] points = new Transform[2];
 
     private void Awake()
@@ -77,7 +78,7 @@ public class Harpoon : MonoBehaviour
                 GetComponent<CapsuleCollider2D>().enabled = false;
             }
         }
-        // 2. 당기는 상태: 몬스터를 플레이어 쪽으로 끌어당김
+        // 2. 당기는 상태: 몬스터를 플레이어 쪽으로 끌어당기고, 동시에 플레이어도 몬스터 쪽으로 약하게 당김
         else if (isPulling)
         {
             pullTimer += Time.deltaTime;
@@ -96,16 +97,24 @@ public class Harpoon : MonoBehaviour
                     pullSpeed * Time.deltaTime
                 );
 
-                // 작살의 위치를 몬스터의 현재 위치 + hitOffset으로 업데이트
+                // 플레이어도 몬스터 방향으로 약하게 끌어당김
+                playerObj.transform.position = Vector3.MoveTowards(
+                    playerObj.transform.position,
+                    enemy.transform.position,
+                    playerPullSpeed * Time.deltaTime
+                );
+
+                // 점진적으로 hitOffset을 0으로 보간하여, 작살의 위치가 몬스터의 움직임을 따르도록 함
+                hitOffset = Vector3.Lerp(hitOffset, Vector3.zero, 2f * Time.deltaTime);
                 transform.position = enemy.transform.position + hitOffset;
 
-                // 밧줄 업데이트: start는 작살의 transform, end는 플레이어
+                // 밧줄 업데이트: start는 작살, end는 플레이어
                 Transform[] pullingPoints = new Transform[2];
                 pullingPoints[0] = transform;
                 pullingPoints[1] = playerObj.transform;
                 tail.GetComponent<LineController>().SetUpLine(pullingPoints);
 
-                // 몬스터가 플레이어에 충분히 가까워지면 당기는 상태 종료 후 회수 상태로 전환
+                // 몬스터와 플레이어가 충분히 가까워지면 당기는 상태 종료 후 회수 상태로 전환
                 if (Vector3.Distance(enemy.transform.position, playerObj.transform.position) < 0.5f)
                 {
                     isPulling = false;
@@ -116,7 +125,7 @@ public class Harpoon : MonoBehaviour
         // 3. 회수 상태: 작살이 플레이어 쪽으로 이동
         else if (isReturn && playerObj != null)
         {
-            // 밧줄 업데이트: start는 작살의 transform, end는 플레이어
+            // 밧줄 업데이트: start는 작살, end는 플레이어
             Transform[] returnPoints = new Transform[2];
             returnPoints[0] = transform;
             returnPoints[1] = playerObj.transform;
