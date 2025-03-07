@@ -852,7 +852,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d975b9f8594a6ca469ffaf3908cfafee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBarFill: {fileID: 0}
   maxHealth: 50
   shakeDuration: 0.3
   shakeMagnitude: 0.2
@@ -885,7 +884,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spear: {fileID: 551101328120880779, guid: c45f17b34bed2a043b1720fa0f6598af, type: 3}
   harpoon: {fileID: 551101328120880779, guid: bff12c08b2b9a354eaeb12b704c7a6de, type: 3}
-  cameraController: {fileID: 0}
 --- !u!1 &2873064332171153947
 GameObject:
   m_ObjectHideFlags: 0
@@ -2255,7 +2253,7 @@ MonoBehaviour:
   isExistHead: 1
   isTakeDamaged: 0
   unattackTimer: 0
-  unattackTime: 0.75
+  unattackTime: 0.5
 --- !u!58 &8289308668730450409
 CircleCollider2D:
   m_ObjectHideFlags: 0

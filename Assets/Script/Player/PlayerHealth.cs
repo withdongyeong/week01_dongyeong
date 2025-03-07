@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public Image healthBarFill;
-
     public float maxHealth = 50; // 최대 체력
     private float currentHealth;
 
@@ -19,7 +17,6 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         if(SceneManager.GetActiveScene().name == "IntegrateScene")
-            healthBarFill = UIManager.Instance.gameObject.transform.GetChild(1).GetChild(1).GetComponent<Image>();
         originalPosition = Camera.main.transform.position; 
         currentHealth = maxHealth; // 시작할 때 최대 체력 설정
     }
@@ -40,7 +37,6 @@ public class PlayerHealth : MonoBehaviour
 
         //SoundManager.instance.PlaySFX("Clash");
 
-        healthBarFill.fillAmount = currentHealth / maxHealth;
 
         if (currentHealth <= 0)
         {
@@ -58,7 +54,6 @@ public class PlayerHealth : MonoBehaviour
     public void UpdateCurrentHP(int value)
     {
         currentHealth = value;
-        healthBarFill.fillAmount = currentHealth / maxHealth;
     }
 
 
