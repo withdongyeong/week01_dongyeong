@@ -852,7 +852,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d975b9f8594a6ca469ffaf3908cfafee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBarFill: {fileID: 0}
   maxHealth: 50
   shakeDuration: 0.3
   shakeMagnitude: 0.2
@@ -2246,7 +2245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 279d98f68bea8474890bc735e82231dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 200
+  maxHealth: 50
   currentHealth: 50
   parts: []
   isExistTail: 1
@@ -2254,7 +2253,7 @@ MonoBehaviour:
   isExistHead: 1
   isTakeDamaged: 0
   unattackTimer: 0
-  unattackTime: 0.75
+  unattackTime: 0.5
 --- !u!58 &8289308668730450409
 CircleCollider2D:
   m_ObjectHideFlags: 0

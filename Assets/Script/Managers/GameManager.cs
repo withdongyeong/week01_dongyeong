@@ -73,7 +73,6 @@ public class GameManager : MonoBehaviour
     public void UpdateTimer()
     {
         playTime += Time.deltaTime;
-        UIManager.Instance.UpdateTimeText((int)playTime);
     }
 
     // 게임 시작
@@ -152,6 +151,24 @@ public class GameManager : MonoBehaviour
     {
         UIManager.Instance.UpdateGoShopUI();
         SceneManager.LoadScene(1);
+    }
+
+    // RestartGame 버튼에 연결
+    public void RestartGame()
+    {
+        // 씬 로드 완료 후 GameStart() 호출을 위해 이벤트 등록
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.LoadScene("IntegrateScene");
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "IntegrateScene")
+        {
+            GameStart();
+            // 이벤트 등록 해제
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
     }
 
     #region 보스
@@ -265,8 +282,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-
 
     public void SharkDestory()
     {
