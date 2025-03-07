@@ -1251,37 +1251,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &810076433
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 810076434}
-  m_Layer: 0
-  m_Name: -------------------
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &810076434
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 810076433}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0021385252, y: -4.568178, z: -0.007445986}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &835324700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1716,63 +1685,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 936830087}
   m_CullTransparentMesh: 1
---- !u!1 &968767477
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 968767479}
-  - component: {fileID: 968767478}
-  m_Layer: 0
-  m_Name: IslandTornadoSpawn
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &968767478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 968767477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c495c56b12a545649bd2ef0dc5aa331a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnIslandCount: 3
-  minDistance: 0.5
-  screenArea: {x: 0, y: 0}
-  areaCollider: {fileID: 600620124}
-  islandPrefabArray:
-  - {fileID: 3577383189568905669, guid: 51c5f3b92d2db7540b6370d31bc4f75e, type: 3}
-  - {fileID: 1413141092216774962, guid: 242be2352a7a0de42b1c5d702d78a11c, type: 3}
-  - {fileID: 55875378809720714, guid: caf23c8cc3efe174aab835fe04c65a1e, type: 3}
-  - {fileID: 7999418950963405836, guid: 53661b66d5be3474a954acd77b458cd0, type: 3}
-  - {fileID: 8480138585967245939, guid: d62ad5da20d0ab74baeb32adc40ae4ef, type: 3}
-  spawnTornadoCount: 2
-  tornadoPrefab: {fileID: 2241344920595703642, guid: 0bc32da812893fd47945703f372e0fce, type: 3}
-  tornadoSpawnInterval: 15
---- !u!4 &968767479
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 968767477}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1024985379
 GameObject:
   m_ObjectHideFlags: 0
@@ -2878,8 +2790,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 934824797}
   - {fileID: 1881482299}
-  - {fileID: 810076434}
-  - {fileID: 968767479}
   - {fileID: 1572860394}
   - {fileID: 76059816}
   - {fileID: 526774922}
