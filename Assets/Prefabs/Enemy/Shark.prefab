@@ -816,8 +816,12 @@ MonoBehaviour:
   target: {fileID: 0}
   speed: 1.5
   rotationSpeed: 2
-  collisionMoveDistance: 3
-  secondMoveDistance: 1
+  orbitDistance: 14
+  orbitSpeed: 0.3
+  chargeInterval: 5
+  chargeDuration: 2
+  chargeSpeed: 8
+  recoveryDuration: 2
   bloodParticle: {fileID: 5095475880817196780}
 --- !u!256 &744148997120422602
 FrictionJoint2D:
@@ -887,7 +891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d26085a935fbe142b0ac7e6aeb893c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealth: 20
 --- !u!1001 &4236249239507371714
 PrefabInstance:
   m_ObjectHideFlags: 0
