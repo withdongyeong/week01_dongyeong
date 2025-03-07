@@ -463,12 +463,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad28fc96231c49e44af8859ee09e4289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bloodParticlePrefab: {fileID: 1263735965935391271, guid: 3f291ff63f1eef64388600bfe63eb697, type: 3}
   speed: 6
   returnSpeed: 6
+  pullSpeed: 2
   targetPosition: {x: 0, y: 0, z: 0}
   startPosition: {x: 0, y: 0, z: 0}
   tail: {fileID: 6266544941973408025}
-  acceleration: 2
+  harpoonDuration: 5
 --- !u!1 &893850488688964499
 GameObject:
   m_ObjectHideFlags: 0

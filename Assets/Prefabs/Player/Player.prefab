@@ -885,7 +885,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spear: {fileID: 551101328120880779, guid: c45f17b34bed2a043b1720fa0f6598af, type: 3}
   harpoon: {fileID: 551101328120880779, guid: bff12c08b2b9a354eaeb12b704c7a6de, type: 3}
-  cameraController: {fileID: 0}
 --- !u!1 &2873064332171153947
 GameObject:
   m_ObjectHideFlags: 0
@@ -2247,7 +2246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 279d98f68bea8474890bc735e82231dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
+  maxHealth: 200
   currentHealth: 50
   parts: []
   isExistTail: 1
