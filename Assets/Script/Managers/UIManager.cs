@@ -48,11 +48,11 @@ public class UIManager : MonoBehaviour
         overUI = transform.GetChild(2).gameObject;
         clearUI = transform.GetChild(3).gameObject;
 
-        // Àç½ÃÀÛ ¹öÆ°
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
         RestartBtn = overUI.transform.GetChild(1).GetComponent<Button>();
         RestartBtn.onClick.AddListener(() => GameManager.Instance.GoShopScene());
         if (RestartBtn != null)
-            Debug.Log("Àç½ÃÀÛ ÀÌº¥Æ® µî·Ï µÇ¾îÀÖÀ½");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½");
 
 
         gameTime = transform.GetChild(4).GetComponent<Text>();
@@ -98,7 +98,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateShaksfinUI()
     {
-        Debug.Log($"¼¡½ºÇÉ ui: {StateManager.Instance.MyCoin}");
+        // Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ui: {StateManager.Instance.MyCoin}");
         shaksfinUI.text = $"Shaksfin: {StateManager.Instance.MyCoin}";
     }
 
@@ -113,7 +113,7 @@ public class UIManager : MonoBehaviour
         gameTime.text = playTime.ToString();
     }
 
-    // Àç½ÃÀÛ ¹öÆ°
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
     public void GameReplay()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -125,11 +125,11 @@ public class UIManager : MonoBehaviour
         {
             FindUI();
 
-            Debug.LogWarning("°ÔÀÓ ¾À");
+            Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½");
         }
         else if(scene.name == "SceneShop")
         {
-            Debug.LogWarning("»óÁ¡ ¾À");
+            Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½");
         }
     }
 }

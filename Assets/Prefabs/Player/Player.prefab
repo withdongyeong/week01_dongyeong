@@ -695,10 +695,10 @@ GameObject:
   - component: {fileID: 94407657635780344}
   - component: {fileID: 5945947258233566560}
   - component: {fileID: 4519142167635833891}
-  - component: {fileID: 6117963410940490631}
   - component: {fileID: 6268746304872313949}
   - component: {fileID: 9117471621491486142}
   - component: {fileID: 1015998508676204224}
+  - component: {fileID: 7825101734915015815}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -714,8 +714,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2121531491239973102}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.02, y: -3, z: -0.007445986}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.02, y: -3, z: -4.554452}
   m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -763,7 +763,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 5
   acceleration: 3
-  deceleration: 5
   turnSpeed: 100
 --- !u!50 &5945947258233566560
 Rigidbody2D:
@@ -829,21 +828,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0.025516408, y: 0.21688803}
   m_Size: {x: 0.90825987, y: 2.5054588}
   m_Direction: 0
---- !u!114 &6117963410940490631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2121531491239973102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9beb162f81e653498f53f4c7406903b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bullet: {fileID: 551101328120880779, guid: c45f17b34bed2a043b1720fa0f6598af, type: 3}
-  attackCount: 0
-  cameraController: {fileID: 0}
 --- !u!114 &6268746304872313949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -887,6 +871,21 @@ MonoBehaviour:
   attractionList: []
   AttractionForce: 100
   F: 9.81
+--- !u!114 &7825101734915015815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2121531491239973102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9beb162f81e653498f53f4c7406903b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spear: {fileID: 551101328120880779, guid: c45f17b34bed2a043b1720fa0f6598af, type: 3}
+  harpoon: {fileID: 551101328120880779, guid: bff12c08b2b9a354eaeb12b704c7a6de, type: 3}
+  cameraController: {fileID: 0}
 --- !u!1 &2873064332171153947
 GameObject:
   m_ObjectHideFlags: 0
@@ -2254,6 +2253,9 @@ MonoBehaviour:
   isExistTail: 1
   isExistBody: 1
   isExistHead: 1
+  isTakeDamaged: 0
+  unattackTimer: 0
+  unattackTime: 0.75
 --- !u!58 &8289308668730450409
 CircleCollider2D:
   m_ObjectHideFlags: 0

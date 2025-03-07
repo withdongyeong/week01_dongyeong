@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    public GameObject bullet;
+    public GameObject spear;
+    public GameObject harpoon;
     
     private int maxSpearAttackCount = 1;
     private int maxHarpoonAttackCount = 1;
@@ -11,12 +12,8 @@ public class PlayerAttack : MonoBehaviour
     private int spearAttackCount;
     private int harpoonAttackCount;
 
-    public CameraController cameraController;
-
     void Start()
     {
-        cameraController = Camera.main.GetComponent<CameraController>();
-
         maxSpearAttackCount += StateManager.Instance.SpearCount;
         spearAttackCount = maxSpearAttackCount;
         harpoonAttackCount = maxHarpoonAttackCount;
@@ -24,7 +21,7 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
-        // 마우스 좌클릭 : 찌르개살 공격
+        // 마우스 좌클릭 : 창 공격
         if (Input.GetMouseButtonDown(0) && spearAttackCount > 0)
         {
             SpearAttack();
@@ -40,22 +37,27 @@ public class PlayerAttack : MonoBehaviour
     private void SpearAttack()
     {
         spearAttackCount--;
-        FireProjectile();
+        FireSpear();
     }
 
     private void HarpoonAttack()
     {
         harpoonAttackCount--;
-        FireProjectile();
+        FireHarpoon();
     }
 
-    private void FireProjectile()
+    private void FireSpear()
     {
-        GameObject bulletObj = Instantiate(bullet, transform.position, Quaternion.Euler(transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition)));
-        bulletObj.GetComponent<Harpoon>().targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Debug.Log("찌르개살 공격");
+        GameObject spearObj = Instantiate(spear, transform.position, Quaternion.Euler(transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition)));
+        spearObj.GetComponent<Spear>().targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    }
 
-        if (cameraController != null)
-            StartCoroutine(cameraController.ShakeCamera());
+    private void FireHarpoon()
+    {
+        Debug.Log("작살 공격");
+        GameObject harpoonObj = Instantiate(harpoon, transform.position, Quaternion.Euler(transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition)));
+        harpoonObj.GetComponent<Harpoon>().targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
     public void ReloadSpear()
