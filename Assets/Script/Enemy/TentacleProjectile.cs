@@ -16,7 +16,7 @@ public class TentacleProjectile : MonoBehaviour
     private bool isMoving = false;
     private bool isReturn = false;
     private float reloadingTime;
-    private Bbb10311031_PlayerAttack _playerAttack;
+    private PlayerAttack _playerAttack;
 
 
     GameObject enemy;

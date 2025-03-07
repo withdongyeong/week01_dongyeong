@@ -1,7 +1,7 @@
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class Spear : MonoBehaviour
+public class Harpoon : MonoBehaviour
 {
     public float speed = 6f; // �̵� �ӵ�
     public float returnSpeed = 6f;
@@ -16,7 +16,7 @@ public class Spear : MonoBehaviour
     private bool isMoving = false;
     private bool isReturn = false;
     private float reloadingTime;
-    private Bbb10311031_PlayerAttack _playerAttack;
+    private PlayerAttack _playerAttack;
 
 
     GameObject enemy;
@@ -28,7 +28,7 @@ public class Spear : MonoBehaviour
     private void Awake()
     {
         playerObj = GameObject.FindGameObjectWithTag("Player");
-        _playerAttack = playerObj.GetComponent<Bbb10311031_PlayerAttack>();
+        _playerAttack = playerObj.GetComponent<PlayerAttack>();
     }
 
     void Start()
@@ -84,11 +84,11 @@ public class Spear : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, playerObj.transform.position, returnSpeed * Time.deltaTime);
 
 
-            SpearRotation();
+            HarpoonRotation();
 
             if (Vector3.Distance(transform.position, playerObj.transform.position) < 0.1f)
             {
-                _playerAttack.AttackCountUp();
+                _playerAttack.ReloadHarpoon();
                 Destroy(gameObject);
             }
         }
@@ -131,7 +131,7 @@ public class Spear : MonoBehaviour
         }
     }
     
-    void SpearRotation()
+    void HarpoonRotation()
     {
         Vector2 direction = transform.position - playerObj.transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
