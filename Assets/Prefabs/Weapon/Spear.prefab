@@ -463,11 +463,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d621cfa40e1a10478582afcafa3cba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spearDamage: 3
   speed: 12
   returnSpeed: 12
   maxDistance: 2
   targetPosition: {x: 0, y: 0, z: 0}
-  bloodParticlePrefab: {fileID: 1263735965935391271, guid: 73e768ae44ace4c47b833773fcd3fd6e, type: 3}
+  bloodParticlePrefab: {fileID: 1263735965935391271, guid: 3f291ff63f1eef64388600bfe63eb697, type: 3}
 --- !u!1 &893850488688964499
 GameObject:
   m_ObjectHideFlags: 0

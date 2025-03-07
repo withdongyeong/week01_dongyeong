@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Spear : MonoBehaviour
 {
+    public int spearDamage = 3;
     public float speed = 6f; // 이동 속도
     public float returnSpeed = 6f; // 되돌아오는 속도
     public float maxDistance = 5f; // 최대 사정거리
@@ -67,15 +68,34 @@ public class Spear : MonoBehaviour
     {
         if (other.CompareTag("Enemy") && !isReturning)
         {
+            // 작살의 후방 방향 계산 (-transform.up)
+            Vector3 bloodDirection = -transform.up;
+            
+            // 충돌 위치(출혈 이펙트 발생 위치)
+            Vector3 collisionPoint = other.ClosestPoint(transform.position);
+            Vector3 spawnPos = collisionPoint;
+            
+            // 출혈 이펙트의 방향 전환
+            float baseAngle = Mathf.Atan2(bloodDirection.y, bloodDirection.x) * Mathf.Rad2Deg;
+            float newAngle = baseAngle - 60f;
+
+            
+
+            // 혈액 파티클이 작살의 후방으로 튀도록 회전값을 적용하여 Instantiate
+            if (bloodParticlePrefab != null)
+            {
+                Instantiate(bloodParticlePrefab, spawnPos, Quaternion.Euler(0, 0, newAngle));
+            }
+
             // 적과 충돌 시 데미지 처리 후 즉시 돌아오기 시작
             isReturning = true;
             if (cameraController != null)
                 StartCoroutine(cameraController.ShakeCamera());
-
-             // 피 튀는 이펙트 실행
-            if (bloodParticlePrefab != null)
+            
+            if (other.GetComponent<Monster>() != null)
             {
-                Instantiate(bloodParticlePrefab, transform.position, Quaternion.identity);
+                // 예를 들어 20의 데미지를 준다고 가정
+                other.GetComponent<Monster>().TakeDamage(spearDamage);
             }
         }
         else if (other.CompareTag("Boss") && !isReturning)
