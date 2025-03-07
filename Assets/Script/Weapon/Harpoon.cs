@@ -34,6 +34,8 @@ public class Harpoon : MonoBehaviour
     // 몬스터와 충돌 시, 작살과 몬스터 사이의 오프셋
     private Vector3 hitOffset;
 
+    private CameraController cameraController;
+
     // 라인 렌더러 연결용 배열 (여기서는 start는 작살의 transform, end는 플레이어)
     Transform[] points = new Transform[2];
 
@@ -41,6 +43,7 @@ public class Harpoon : MonoBehaviour
     {
         playerObj = GameObject.FindGameObjectWithTag("Player");
         _playerAttack = playerObj.GetComponent<PlayerAttack>();
+        cameraController = Camera.main.GetComponent<CameraController>();
     }
 
     void Start()
@@ -164,6 +167,8 @@ public class Harpoon : MonoBehaviour
             newPoints[1] = playerObj.transform;
             tail.GetComponent<LineController>().SetUpLine(newPoints);
 
+            StartCoroutine(cameraController.ShakeCamera());
+            
             // 출혈 이펙트 (원하는 경우)
             Vector3 bloodDirection = -transform.up;
             Vector3 collisionPoint = other.ClosestPoint(transform.position);

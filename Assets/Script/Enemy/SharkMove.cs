@@ -4,10 +4,12 @@ using System.Collections;
 public class SharkMove : MonoBehaviour
 {
     public Transform target; // 플레이어의 Transform
-    public float speed = 3f; // 이동 속도
+    public float speed = 3f; // 기본 이동 속도
     public float rotationSpeed = 0.5f; // 회전 속도
     public float collisionMoveDistance = 3f; // 충돌 후 이동 거리
     public float secondMoveDistance = 1f; // 두 번째 이동 거리
+    public float distanceThreshold = 9f; // 상어와 플레이어 거리 임계값 (예시)
+    public float sharkBoostSpeed = 3f;
     private bool isReversing = false;
 
     public ParticleSystem bloodParticle;
@@ -39,7 +41,11 @@ public class SharkMove : MonoBehaviour
             float angle = Mathf.LerpAngle(transform.eulerAngles.z, targetAngle, rotationSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Euler(0, 0, angle); // 부드러운 회전 적용
 
-            transform.position += transform.right * speed * Time.deltaTime; // 현재 방향 기준 이동
+            // 플레이어와의 거리 체크 후 속도 결정
+            float distance = Vector2.Distance(transform.position, target.position);
+            float currentSpeed = (distance > distanceThreshold) ? speed * sharkBoostSpeed : speed;
+
+            transform.position += transform.right * currentSpeed * Time.deltaTime; // 현재 방향 기준 이동
         }
     }
 

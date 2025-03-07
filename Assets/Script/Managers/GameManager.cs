@@ -207,16 +207,38 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
+            Vector3 spawnPos = Vector3.zero;
+
             if (allowAllDirection) 
             {
-                int direction = Random.Range(0, 4);
-                Vector3 spawnPos = Vector3.zero;
-
-                switch (direction) {
-                    case 0: spawnPos = new Vector3(Random.Range(-7, 7), 9, 0); break;
-                    case 1: spawnPos = new Vector3(Random.Range(-7, 7), -9, 0); break;
-                    case 2: spawnPos = new Vector3(-18, Random.Range(-7, 7), 0); break;
-                    case 3: spawnPos = new Vector3(18, Random.Range(-7, 7), 0); break;
+                // 상어는 플레이어 기준 소환
+                if(prefab.name == "Shark")
+                {
+                    if(playerObject != null)
+                    {
+                        // 최소 및 최대 스폰 거리 (필요에 따라 값 조정)
+                        float minDistance = 10f;
+                        float maxDistance = 15f;
+                        float angle = Random.Range(0f, Mathf.PI * 2);
+                        float distance = Random.Range(minDistance, maxDistance);
+                        spawnPos = playerObject.transform.position + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * distance;
+                    }
+                    else
+                    {
+                        // playerObject가 없을 경우 대비 기본값
+                        spawnPos = new Vector3(Random.Range(-7, 7), 9, 0);
+                    }
+                }
+                else
+                {
+                    // 다른 프리팹은 기존 방식 유지 (예: 크라켄)
+                    int direction = Random.Range(0, 4);
+                    switch (direction) {
+                        case 0: spawnPos = new Vector3(Random.Range(-7, 7), 30, 0); break;
+                        case 1: spawnPos = new Vector3(Random.Range(-7, 7), -30, 0); break;
+                        case 2: spawnPos = new Vector3(-30, Random.Range(-7, 7), 0); break;
+                        case 3: spawnPos = new Vector3(30, Random.Range(-7, 7), 0); break;
+                    }
                 }
 
                 GameObject go = Instantiate(prefab, spawnPos, Quaternion.identity);
@@ -226,12 +248,25 @@ public class GameManager : MonoBehaviour
             } 
             else 
             {
-                int randomPosX = Random.Range(-7, 7);
-                Instantiate(prefab, new Vector3(randomPosX, 7, 0), Quaternion.identity);
+                // 구름 소환: 플레이어 기준으로 소환하도록 수정
+                if (playerObject != null && prefab.name == "Cloud")
+                {
+                    // 플레이어 위치에서 x는 -7~7, y는 위쪽으로 7만큼 떨어진 곳
+                    spawnPos = playerObject.transform.position + new Vector3(Random.Range(-7, 7), 7, 0);
+                }
+                else
+                {
+                    // 기본값 (플레이어가 없거나, 다른 프리팹인 경우)
+                    int randomPosX = Random.Range(-7, 7);
+                    spawnPos = new Vector3(randomPosX, 7, 0);
+                }
+                Instantiate(prefab, spawnPos, Quaternion.identity);
                 yield return new WaitForSeconds(interval);
             }
         }
     }
+
+
 
     public void SharkDestory()
     {
