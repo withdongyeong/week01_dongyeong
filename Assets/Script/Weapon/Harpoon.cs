@@ -167,6 +167,7 @@ public class Harpoon : MonoBehaviour
         HarpoonRotation();
         if (Vector3.Distance(transform.position, playerObj.transform.position) < 0.1f)
         {
+            Debug.Log("작살 준비 완료");
             _playerAttack.ReloadHarpoon();
             Destroy(gameObject);
         }
@@ -289,17 +290,8 @@ public class Harpoon : MonoBehaviour
     {
         if (!isReturn) // 이미 돌아오는 중이면 중복 실행 방지
         {
-            isMoving = false;
-            isPulling = false;
-            isReturn = true; // 🛑 돌아오는 상태로 설정
-            GetComponent<CapsuleCollider2D>().enabled = false;
+            ReturnStart();
 
-            // 🛑 Harpoon이 적중한 위치에서 돌아오도록 설정 (사라지지 않음)
-            if (enemy != null)
-            {
-                hitOffset = transform.position - enemy.transform.position;
-                transform.position = enemy.transform.position + hitOffset;
-            }
         }
     }
 }
