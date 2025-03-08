@@ -466,8 +466,8 @@ MonoBehaviour:
   bloodParticlePrefab: {fileID: 1263735965935391271, guid: 3f291ff63f1eef64388600bfe63eb697, type: 3}
   speed: 7
   returnSpeed: 14
-  pullSpeed: 6
-  playerPullSpeed: 4
+  pullSpeed: 10
+  playerPullSpeed: 5
   backwardDistance: 1.5
   backwardSpeed: 4
   targetPosition: {x: 0, y: 0, z: 0}

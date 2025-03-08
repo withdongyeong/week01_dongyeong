@@ -30,7 +30,7 @@ public class Whale : MonoBehaviour
         if(isTakeDamaged)   // ������ �޾�����
         {
             unattackTimer += Time.deltaTime;    // �����ð� ����
-            Debug.Log("���� ����");
+            // Debug.Log("���� ����");
 
             if(unattackTime < unattackTimer) 
             {

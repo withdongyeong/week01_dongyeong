@@ -464,7 +464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spearDamage: 2
-  forwardSpeed: 18
+  forwardSpeed: 36
   returnSpeed: 12
   maxDistance: 3
   backwardDistance: 1.5

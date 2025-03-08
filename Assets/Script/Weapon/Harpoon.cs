@@ -6,38 +6,38 @@ public class Harpoon : MonoBehaviour
     public GameObject bloodParticlePrefab;
 
     [Header("Movement Settings")]
-    public float speed = 6f;            // 발사 시 이동 속도
-    public float returnSpeed = 6f;      // 회수 시 이동 속도
-    public float pullSpeed = 1f;        // 몬스터 당기는 속도
-    public float playerPullSpeed = 0.5f; // 플레이어가 몬스터 쪽으로 끌리는 속도
-    public float backwardDistance = 1.5f; // 발사 전 뒤로 이동 거리
-    public float backwardSpeed = 4f;    // 발사 전 뒤로 이동 속도
+    public float speed = 6f;
+    public float returnSpeed = 6f;
+    public float pullSpeed = 1f;
+    public float playerPullSpeed = 0.5f;
+    public float backwardDistance = 1.5f;
+    public float backwardSpeed = 4f;
 
     [Header("Positions")]
-    public Vector3 targetPosition;      // 발사 목표 위치
-    public Vector3 startPosition;       // 발사 시작 위치
+    public Vector3 targetPosition;
+    public Vector3 startPosition;
 
     [Header("Tail / Line Renderer")]
-    public GameObject tail;             // 밧줄(Line Renderer가 포함된 오브젝트)
+    public GameObject tail;
 
     [Header("Harpoon Duration")]
-    public float harpoonDuration = 5f;  // 연결 상태 최대 유지 시간 (초)
+    public float harpoonDuration = 5f;
 
-    private bool isMoving = false;      // 발사 상태
-    private bool isPulling = false;     // 몬스터 당기는 상태
-    private bool isReturn = false;      // 회수 상태
-    private bool isPreparing = true;    // 초기 뒤로 이동 상태 여부
+    private bool isMoving = false;
+    private bool isPulling = false;
+    private bool isReturn = false;
+    private bool isPreparing = true;
 
-    private float pullTimer = 0f;       // 당기는 상태에서 경과 시간
+    private float pullTimer = 0f;
 
     private PlayerAttack _playerAttack;
     private GameObject playerObj;
-    private GameObject enemy;           // 당겨지는 몬스터 참조
-    private Vector3 playerPrevPosition; // 플레이어의 이전 프레임 위치
-    private Vector3 hitOffset;          // 충돌 시 오프셋
+    private GameObject enemy;
+    private Vector3 playerPrevPosition;
+    private Vector3 hitOffset;
 
     private CameraController cameraController;
-    private Transform[] points = new Transform[2]; // 라인 렌더러 연결용 배열
+    private Transform[] points = new Transform[2];
 
     private void Awake()
     {
@@ -56,7 +56,7 @@ public class Harpoon : MonoBehaviour
         SetTail();
         transform.up = (targetPosition - startPosition).normalized;
 
-        StartCoroutine(PrepareAndShoot()); // 뒤로 이동 후 발사
+        StartCoroutine(PrepareAndShoot());
     }
 
     void SetTail()
@@ -112,7 +112,6 @@ public class Harpoon : MonoBehaviour
                 isMoving = false;
                 GetComponent<CapsuleCollider2D>().enabled = false;
             }
-
         }
         else if (isPulling)
         {
@@ -131,6 +130,7 @@ public class Harpoon : MonoBehaviour
         {
             isPulling = false;
             isReturn = true;
+            NotifyShark(false);
         }
         else
         {
@@ -154,6 +154,7 @@ public class Harpoon : MonoBehaviour
             {
                 isPulling = false;
                 isReturn = true;
+                NotifyShark(false);
             }
         }
     }
@@ -210,6 +211,27 @@ public class Harpoon : MonoBehaviour
         StartCoroutine(cameraController.ShakeCamera());
         SpawnBloodEffect(other);
         UpdateTail();
+
+        NotifyShark(true);
+
+        // 🛑 적이 상어라면, Harpoon을 등록 (죽을 때 작살 복귀 가능)
+        SharkMove shark = enemy.GetComponent<SharkMove>();
+        if (shark != null)
+        {
+            shark.SetHarpoon(this);
+        }
+    }
+
+    void NotifyShark(bool isHarpooned)
+    {
+        if (enemy != null)
+        {
+            SharkMove shark = enemy.GetComponent<SharkMove>();
+            if (shark != null)
+            {
+                shark.SetHarpoonedState(isHarpooned, playerObj.transform.position);
+            }
+        }
     }
 
     void SpawnBloodEffect(Collider2D other)
@@ -237,6 +259,8 @@ public class Harpoon : MonoBehaviour
             GetComponent<CapsuleCollider2D>().enabled = false;
             hitOffset = transform.position - enemy.transform.position;
             UpdateTail();
+
+            NotifyShark(true);
         }
         else if (collision.gameObject.CompareTag("Obstacle") && isMoving)
         {
@@ -257,5 +281,24 @@ public class Harpoon : MonoBehaviour
         isPulling = false;
         isReturn = true;
         GetComponent<CapsuleCollider2D>().enabled = false;
+        NotifyShark(false);
+    }
+
+    public void ForceReturn()
+    {
+        if (!isReturn) // 이미 돌아오는 중이면 중복 실행 방지
+        {
+            isMoving = false;
+            isPulling = false;
+            isReturn = true; // 🛑 돌아오는 상태로 설정
+            GetComponent<CapsuleCollider2D>().enabled = false;
+
+            // 🛑 Harpoon이 적중한 위치에서 돌아오도록 설정 (사라지지 않음)
+            if (enemy != null)
+            {
+                hitOffset = transform.position - enemy.transform.position;
+                transform.position = enemy.transform.position + hitOffset;
+            }
+        }
     }
 }
