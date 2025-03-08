@@ -816,12 +816,15 @@ MonoBehaviour:
   target: {fileID: 0}
   speed: 1.5
   rotationSpeed: 2
-  orbitDistance: 14
-  orbitSpeed: 0.3
-  chargeInterval: 5
-  chargeDuration: 2
-  chargeSpeed: 8
-  recoveryDuration: 2
+  orbitMinDistance: 16
+  orbitMaxDistance: 24
+  orbitSafeDistance: 16
+  orbitChangeInterval: 1.5
+  chargeMinInterval: 8
+  chargeMaxInterval: 16
+  chargeDuration: 4
+  chargeSpeed: 10
+  chargeDistance: 20
   bloodParticle: {fileID: 5095475880817196780}
 --- !u!256 &744148997120422602
 FrictionJoint2D:

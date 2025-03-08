@@ -8,32 +8,38 @@ public class SharkMove : MonoBehaviour
     public float speed = 3f;
     public float rotationSpeed = 0.5f;
 
-    public float orbitDistance = 10f;
-    public float orbitSpeed = 2f;
+    public float orbitMinDistance = 8f;
+    public float orbitMaxDistance = 12f;
+    public float orbitSafeDistance = 5f;
+    public float orbitChangeInterval = 2f;
 
-    public float chargeInterval = 5f;
-    public float chargeDuration = 1f;
-    public float chargeSpeed = 10f;
+    public float chargeMinInterval = 3f;
+    public float chargeMaxInterval = 7f;
+    public float chargeDuration = 1.5f;
+    public float chargeSpeed = 12f;
+    public float chargeDistance = 10f;
 
-    public float recoveryDuration = 0.5f;
-
-    private float orbitAngle = 0f;
     private float chargeTimer = 0f;
-
+    private float nextChargeTime;
     private Vector2 fleeDirection;
+    private Vector2 orbitTargetPosition;
 
     public ParticleSystem bloodParticle;
+    private Harpoon attachedHarpoon;
+    private TrailRenderer trailRenderer;
+    private Rigidbody2D rb;
 
-    private Harpoon attachedHarpoon; // 🛑 현재 박혀 있는 작살 저장
-    private TrailRenderer trailRenderer; // 🛑 Trail Renderer 추가
+    private float nextOrbitChangeTime = 0f;
+    private Vector2 chargeTargetPosition;
 
     private enum SharkState
     {
         Orbiting,
+        PreparingCharge,
         Charging,
         Fleeing,
         Stunned,
-        Dead // 🛑 추가: 죽은 상태
+        Dead
     }
 
     private SharkState currentState = SharkState.Orbiting;
@@ -46,30 +52,34 @@ public class SharkMove : MonoBehaviour
             target = playerObj.transform;
         }
 
-        // 🛑 하위 오브젝트에서 Trail Renderer 찾기
-        Transform fin = transform.Find("Fin/GameObject"); // Trail Renderer가 있는 오브젝트 경로
+        Transform fin = transform.Find("Fin/GameObject");
         if (fin != null)
         {
             trailRenderer = fin.GetComponent<TrailRenderer>();
         }
+
+        rb = GetComponent<Rigidbody2D>();
+
+        nextChargeTime = Time.time + Random.Range(chargeMinInterval, chargeMaxInterval);
+
+        SetNewOrbitTarget();
     }
 
     void Update()
     {
-        if (currentState == SharkState.Dead) return; // 🛑 죽었으면 아무것도 하지 않음
+        if (currentState == SharkState.Dead) return;
 
         switch (currentState)
         {
             case SharkState.Orbiting:
                 OrbitBehavior();
                 break;
-
+            case SharkState.PreparingCharge:
+                break;
             case SharkState.Charging:
                 break;
-
             case SharkState.Fleeing:
                 break;
-
             case SharkState.Stunned:
                 break;
         }
@@ -81,28 +91,64 @@ public class SharkMove : MonoBehaviour
 
         float distance = Vector2.Distance(transform.position, target.position);
 
-        if (distance > orbitDistance)
+        if (distance > orbitMaxDistance)
         {
             Vector2 direction = (target.position - transform.position).normalized;
-            MoveAndRotate(direction, speed);
+            MoveAndRotate(direction, speed * 1.5f);
         }
         else
         {
-            chargeTimer += Time.deltaTime;
-            if (chargeTimer >= chargeInterval)
+            if (Time.time >= nextChargeTime)
             {
-                chargeTimer = 0f;
-                StartCoroutine(ChargeTowardsPlayer());
+                nextChargeTime = Time.time + Random.Range(chargeMinInterval, chargeMaxInterval);
+                StartCoroutine(PrepareCharge());
             }
 
-            Vector2 orbitCenter = target.position;
-            orbitAngle += orbitSpeed * Time.deltaTime;
-            Vector2 desiredPosition2D = orbitCenter + new Vector2(Mathf.Cos(orbitAngle), Mathf.Sin(orbitAngle)) * orbitDistance;
-            Vector3 desiredPosition = new Vector3(desiredPosition2D.x, desiredPosition2D.y, transform.position.z);
-            Vector2 moveDirection = desiredPosition2D - new Vector2(transform.position.x, transform.position.y);
-            transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * speed);
-            SmoothRotate(moveDirection);
+            if (Time.time >= nextOrbitChangeTime)
+            {
+                SetNewOrbitTarget();
+            }
+
+            Vector2 moveDirection = (orbitTargetPosition - (Vector2)transform.position).normalized;
+            MoveAndRotate(moveDirection, speed);
         }
+    }
+
+    private void SetNewOrbitTarget()
+    {
+        if (target == null) return;
+
+        int maxAttempts = 5;
+        for (int i = 0; i < maxAttempts; i++)
+        {
+            float randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+            float randomDistance = Random.Range(orbitMinDistance, orbitMaxDistance);
+            Vector2 randomOffset = new Vector2(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle)) * randomDistance;
+            Vector2 candidatePosition = (Vector2)target.position + randomOffset;
+
+            if (Vector2.Distance(candidatePosition, target.position) > orbitSafeDistance)
+            {
+                orbitTargetPosition = candidatePosition;
+                nextOrbitChangeTime = Time.time + orbitChangeInterval;
+                return;
+            }
+        }
+
+        orbitTargetPosition = (Vector2)target.position + new Vector2(orbitMinDistance, 0);
+        nextOrbitChangeTime = Time.time + orbitChangeInterval;
+    }
+
+    private IEnumerator PrepareCharge()
+    {
+        currentState = SharkState.PreparingCharge;
+
+        float prepareTime = 0.5f;
+        Vector3 originalScale = transform.localScale;
+        transform.localScale = originalScale * 0.9f;
+        yield return new WaitForSeconds(prepareTime);
+        transform.localScale = originalScale;
+
+        StartCoroutine(ChargeTowardsPlayer());
     }
 
     private IEnumerator ChargeTowardsPlayer()
@@ -110,28 +156,18 @@ public class SharkMove : MonoBehaviour
         currentState = SharkState.Charging;
 
         Vector2 directionToPlayer = (target.position - transform.position).normalized;
-        float targetAngle = Mathf.Atan2(directionToPlayer.y, directionToPlayer.x) * Mathf.Rad2Deg;
-        Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
-
-        float elapsedRotation = 0f;
-        float rotationTime = 0.5f;
-        Quaternion startRotation = transform.rotation;
-        while (elapsedRotation < rotationTime)
-        {
-            elapsedRotation += Time.deltaTime;
-            transform.rotation = Quaternion.Lerp(startRotation, targetRotation, elapsedRotation / rotationTime);
-            yield return null;
-        }
+        chargeTargetPosition = (Vector2)transform.position + directionToPlayer * chargeDistance;
 
         float elapsedTime = 0f;
         while (elapsedTime < chargeDuration)
         {
-            transform.position += (Vector3)(directionToPlayer * chargeSpeed * Time.deltaTime);
+            MoveAndRotate(directionToPlayer, chargeSpeed);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         currentState = SharkState.Orbiting;
+        SetNewOrbitTarget();
     }
 
     public void SetHarpoonedState(bool state, Vector2 playerPos)
@@ -148,33 +184,7 @@ public class SharkMove : MonoBehaviour
         }
     }
 
-    public void SetHarpoon(Harpoon harpoon) // 🛑 작살이 박히면 연결
-    {
-        attachedHarpoon = harpoon;
-    }
-
-    public void SetDeadState()
-    {
-        currentState = SharkState.Dead; // 🛑 죽으면 모든 움직임을 멈춤
-
-        // 🛑 Trail Renderer 끄기
-        if (trailRenderer != null)
-        {
-            trailRenderer.enabled = false;
-        }
-
-        // 🛑 박혀 있던 작살을 즉시 복귀하도록 명령
-        if (attachedHarpoon != null)
-        {
-            attachedHarpoon.ForceReturn();
-        }
-
-        // 🛑 애니메이션 재생 후 삭제
-        GetComponent<Animator>().SetTrigger("Die");
-        StartCoroutine(DestroyAfterAnimation());
-    }
-
-    private IEnumerator FleeFromPlayer()
+    private IEnumerator FleeFromPlayer() // 🛑 복구 완료!
     {
         float fleeTime = 2f;
         float fleeSpeed = 5f;
@@ -189,16 +199,37 @@ public class SharkMove : MonoBehaviour
         }
 
         currentState = SharkState.Orbiting;
+        SetNewOrbitTarget();
+    }
+
+    public void SetHarpoon(Harpoon harpoon) 
+    {
+        attachedHarpoon = harpoon;
+    }
+
+    public void SetDeadState()
+    {
+        currentState = SharkState.Dead;
+
+        if (trailRenderer != null)
+        {
+            trailRenderer.enabled = false;
+        }
+
+        if (attachedHarpoon != null)
+        {
+            attachedHarpoon.ForceReturn();
+        }
+
+        GetComponent<Animator>().SetTrigger("Die");
+        StartCoroutine(DestroyAfterAnimation());
     }
 
     private IEnumerator DestroyAfterAnimation()
     {
         Animator animator = GetComponent<Animator>();
-
-        // 현재 재생 중인 애니메이션의 길이를 가져와 대기
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
-
-        Destroy(gameObject); // 애니메이션이 끝나면 몬스터 삭제
+        Destroy(gameObject);
     }
 
     void MoveAndRotate(Vector2 direction, float moveSpeed)
@@ -217,9 +248,11 @@ public class SharkMove : MonoBehaviour
         }
     }
 
-    public void EatWhale() // 🛑 삭제 안 함
+    public void EatWhale()
     {
         if (bloodParticle != null)
+        {
             bloodParticle.Play();
+        }
     }
 }

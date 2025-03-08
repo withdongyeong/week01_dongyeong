@@ -32,10 +32,10 @@ public class SeaTornado : Attraction
             Disappear();
     }
 
-    // ¹è¸¦ È¸¿À¸® Áß½ÉÀ¸·Î ²ø¾î´ç±â´Â ¹æÇâ ¹ÝÈ¯
+    // ï¿½è¸¦ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ß½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     public override Vector3 GetAttractionDirection(ApplyAttractionObject applyObject)
     {
-        // ¹è -> È¸¿À¸® Áß½É
+        // ï¿½ï¿½ -> È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ß½ï¿½
         return (transform.position - applyObject.transform.position).normalized;
     }
 
@@ -44,11 +44,11 @@ public class SeaTornado : Attraction
         if (isExistPlayer)
         {
             isExistPlayer = false;
-            Debug.Log("Åä³×ÀÌµµ°¡ ÇÃ·¹ÀÌ¾î Ã¼·Â °¨¼Ò½ÃÅ´!");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½Å´!");
         }
-        Debug.Log("Åä³×ÀÌµµ ¼Ò¸ê!");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½Ìµï¿½ ï¿½Ò¸ï¿½!");
         Destroy(gameObject);
     }
 
-    // OnTrigger, OnCollision Ãß°¡ ±ÝÁö
+    // OnTrigger, OnCollision ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½
 }

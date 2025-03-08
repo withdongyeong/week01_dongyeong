@@ -152,9 +152,9 @@ MonoBehaviour:
   isGameClear: 0
   playTime: 0
   Level: 1
-  startTime: 5
+  startTime: 0
   isStartGame: 0
-  sharkSpawnInterval: 5
+  sharkSpawnInterval: 10
   playerPrefab: {fileID: 2121531491239973102, guid: 4127711dae6642548b4aa694666ab5ae, type: 3}
   playerSpawnPosition: {x: 0, y: -3, z: 0}
   spawnTransformList: []
