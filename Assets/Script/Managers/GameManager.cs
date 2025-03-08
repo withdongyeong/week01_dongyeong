@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
         if (spawnIntervalCorouineList.Count == 0)
         {
             spawnIntervalCorouineList.Add(StartCoroutine(SpawnIntervalPrefabCoroutine(spawnPrefabList[0], 10.0f, false)));
-            Debug.Log($"구름 코루틴 추가, 현재 코루틴 개수: {spawnIntervalCorouineList.Count}");
+            // Debug.Log($"구름 코루틴 추가, 현재 코루틴 개수: {spawnIntervalCorouineList.Count}");
         }
     }
 

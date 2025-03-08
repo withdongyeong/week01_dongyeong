@@ -884,6 +884,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spear: {fileID: 551101328120880779, guid: c45f17b34bed2a043b1720fa0f6598af, type: 3}
   harpoon: {fileID: 551101328120880779, guid: bff12c08b2b9a354eaeb12b704c7a6de, type: 3}
+  maxComboCount: 7
+  maxComboTriggerCount: 3
+  comboDuration: 1.5
+  comboDelay: 0.2
+  lastComboDelay: 1.5
 --- !u!1 &2873064332171153947
 GameObject:
   m_ObjectHideFlags: 0
