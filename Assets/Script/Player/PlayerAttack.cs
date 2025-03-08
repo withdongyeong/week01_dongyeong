@@ -71,12 +71,23 @@ public class PlayerAttack : MonoBehaviour
     private GameObject FireSpear(float angleOffset)
     {
         Vector3 targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Quaternion rotation = Quaternion.Euler(0, 0, angleOffset);
+        targetPos.z = 0f;
 
-        GameObject spearObj = Instantiate(spear, transform.position, rotation * Quaternion.Euler(transform.position - targetPos));
+        // 마우스 방향을 기준으로 각도 계산
+        Vector3 direction = (targetPos - transform.position).normalized;
+        float baseAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        // 각도 보정 추가
+        float finalAngle = baseAngle + angleOffset;
+
+        // 최종 회전 적용
+        Quaternion rotation = Quaternion.Euler(0, 0, finalAngle);
+        GameObject spearObj = Instantiate(spear, transform.position, rotation);
+        
         spearObj.GetComponent<Spear>().targetPosition = targetPos;
         return spearObj;
     }
+
 
     private void FireHarpoon()
     {
