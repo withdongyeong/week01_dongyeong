@@ -15,7 +15,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4691182832208625436
 Transform:
   m_ObjectHideFlags: 0
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 112984227544494741}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.01, y: -1.0714285, z: 0.007445986}
+  m_LocalPosition: {x: -0.01, y: -0.43, z: 0.007445986}
   m_LocalScale: {x: 1.4285715, y: 1.4285715, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -787,9 +787,9 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!70 &4519142167635833891
 CapsuleCollider2D:
@@ -884,6 +884,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spear: {fileID: 551101328120880779, guid: c45f17b34bed2a043b1720fa0f6598af, type: 3}
   harpoon: {fileID: 551101328120880779, guid: bff12c08b2b9a354eaeb12b704c7a6de, type: 3}
+  maxComboCount: 7
+  maxComboTriggerCount: 3
+  comboDuration: 1.5
+  comboDelay: 0.2
+  lastComboDelay: 1.5
 --- !u!1 &2873064332171153947
 GameObject:
   m_ObjectHideFlags: 0
@@ -1280,7 +1285,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
@@ -2101,7 +2106,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
@@ -2132,7 +2137,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0, y: -1.3333321}
+  m_ConnectedAnchor: {x: 0, y: -1.3333336}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -2161,7 +2166,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4711778844928092847
 Transform:
   m_ObjectHideFlags: 0
@@ -2171,7 +2176,7 @@ Transform:
   m_GameObject: {fileID: 5647222729687307431}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.009999996, y: -2.2402546, z: 0.007445986}
+  m_LocalPosition: {x: -0.009999996, y: -1.5988263, z: 0.007445986}
   m_LocalScale: {x: 0.25, y: 0.15, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2245,8 +2250,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 279d98f68bea8474890bc735e82231dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
-  currentHealth: 50
+  maxHealth: 200
+  currentHealth: 200
   parts: []
   isExistTail: 1
   isExistBody: 1
@@ -2478,7 +2483,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
@@ -2509,7 +2514,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: -0.009999999, y: -1.0714285}
+  m_ConnectedAnchor: {x: -0.009999999, y: -0.4300002}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -2773,7 +2778,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
@@ -2804,7 +2809,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0, y: -1.3333352}
+  m_ConnectedAnchor: {x: 0, y: -1.3333336}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:

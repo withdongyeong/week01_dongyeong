@@ -27,10 +27,10 @@ public class Whale : MonoBehaviour
 
     void Update()
     {
-        if(isTakeDamaged)   // µ¥¹ÌÁö ¹Þ¾ÒÀ¸¸é
+        if(isTakeDamaged)   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾ï¿½ï¿½ï¿½ï¿½ï¿½
         {
-            unattackTimer += Time.deltaTime;    // ¹«Àû½Ã°£ ÃøÁ¤
-            Debug.Log("°í·¡ ¹«Àû");
+            unattackTimer += Time.deltaTime;    // ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
+            // Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 
             if(unattackTime < unattackTimer) 
             {
@@ -43,7 +43,7 @@ public class Whale : MonoBehaviour
     public void TakeDamage(int attack = 1)
     {
         
-        // ÇöÀç Ã¼·Â
+        // ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½
         currentHealth = Mathf.Clamp(currentHealth - attack, 0, maxHealth);
         if(currentHealth > 0)
         {

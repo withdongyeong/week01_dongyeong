@@ -1,43 +1,43 @@
 using UnityEngine;
+using System.Collections;
 
 public class Harpoon : MonoBehaviour
-{    
+{
     public GameObject bloodParticlePrefab;
 
     [Header("Movement Settings")]
-    public float speed = 6f;            // 발사 시 이동 속도
-    public float returnSpeed = 6f;      // 회수 시 이동 속도
-    public float pullSpeed = 1f;        // 몬스터 당기는 속도
-    public float playerPullSpeed = 0.5f; // 플레이어가 몬스터 쪽으로 끌리는 속도
+    public float speed = 6f;
+    public float returnSpeed = 6f;
+    public float pullSpeed = 1f;
+    public float playerPullSpeed = 0.5f;
+    public float backwardDistance = 1.5f;
+    public float backwardSpeed = 4f;
 
     [Header("Positions")]
-    public Vector3 targetPosition;      // 발사 목표 위치
-    public Vector3 startPosition;       // 발사 시작 위치
+    public Vector3 targetPosition;
+    public Vector3 startPosition;
 
     [Header("Tail / Line Renderer")]
-    public GameObject tail;             // 밧줄(Line Renderer가 포함된 오브젝트)
+    public GameObject tail;
 
     [Header("Harpoon Duration")]
-    public float harpoonDuration = 5f;  // 연결 상태 최대 유지 시간 (초)
+    public float harpoonDuration = 5f;
 
-    // 내부 상태 변수
-    private bool isMoving = false;      // 발사 상태
-    private bool isPulling = false;     // 몬스터 당기는 상태
-    private bool isReturn = false;      // 회수 상태
+    private bool isMoving = false;
+    private bool isPulling = false;
+    private bool isReturn = false;
+    private bool isPreparing = true;
 
-    private float pullTimer = 0f;       // 당기는 상태에서 경과 시간
+    private float pullTimer = 0f;
 
     private PlayerAttack _playerAttack;
     private GameObject playerObj;
-    private GameObject enemy;           // 당겨지는 몬스터 참조
-
-    // 몬스터와 충돌 시, 작살과 몬스터 사이의 오프셋
+    private GameObject enemy;
+    private Vector3 playerPrevPosition;
     private Vector3 hitOffset;
 
     private CameraController cameraController;
-
-    // 라인 렌더러 연결용 배열 (여기서는 start는 작살의 transform, end는 플레이어)
-    Transform[] points = new Transform[2];
+    private Transform[] points = new Transform[2];
 
     private void Awake()
     {
@@ -49,11 +49,14 @@ public class Harpoon : MonoBehaviour
     void Start()
     {
         startPosition = transform.position;
-        // 2D 평면으로 고정 (z = 0)
         targetPosition = new Vector3(targetPosition.x, targetPosition.y, 0f);
         returnSpeed = returnSpeed * StateManager.Instance.ReloadingTime();
+        playerPrevPosition = playerObj.transform.position;
+
         SetTail();
-        isMoving = true;
+        transform.up = (targetPosition - startPosition).normalized;
+
+        StartCoroutine(PrepareAndShoot());
     }
 
     // 초기 라인 렌더러 설정 (start: 작살의 transform, end: 플레이어)
@@ -64,16 +67,46 @@ public class Harpoon : MonoBehaviour
         tail.GetComponent<LineController>().SetUpLine(points);
     }
 
+    IEnumerator PrepareAndShoot()
+    {
+        float elapsedTime = 0f;
+        Vector3 backwardStartPos = transform.position;
+        Vector3 backwardTargetPos = backwardStartPos - transform.up * backwardDistance;
+
+        while (elapsedTime < backwardDistance / backwardSpeed)
+        {
+            float progress = elapsedTime / (backwardDistance / backwardSpeed);
+            Vector3 playerMovementOffset = playerObj.transform.position - playerPrevPosition;
+            playerPrevPosition = playerObj.transform.position;
+
+            backwardStartPos += playerMovementOffset;
+            backwardTargetPos += playerMovementOffset;
+
+            transform.position = Vector3.Lerp(backwardStartPos, backwardTargetPos, progress);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = backwardTargetPos;
+        isPreparing = false;
+
+        startPosition = transform.position;
+        isMoving = true;
+    }
+
     void Update()
     {
-        // 1. 발사 상태: 목표를 향해 날아감
+        if (isPreparing) return;
+
+        Vector3 playerMovementOffset = playerObj.transform.position - playerPrevPosition;
+        playerPrevPosition = playerObj.transform.position;
+        transform.position += playerMovementOffset;
+
         if (isMoving)
         {
-            transform.up = (targetPosition - startPosition).normalized;
             transform.position = Vector3.Lerp(transform.position, targetPosition, speed * Time.deltaTime);
-
-            // 목표 지점에 도달했으나 몬스터와 충돌하지 않은 경우
-            if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
+            if (Vector3.Distance(transform.position, targetPosition) <= backwardDistance + 0.1f)
             {
                 StateManager.Instance.CoinPlus();
                 isReturn = true;
@@ -81,117 +114,141 @@ public class Harpoon : MonoBehaviour
                 GetComponent<CapsuleCollider2D>().enabled = false;
             }
         }
-        // 2. 당기는 상태: 몬스터를 플레이어 쪽으로 끌어당기고, 동시에 플레이어도 몬스터 쪽으로 약하게 당김
         else if (isPulling)
         {
-            pullTimer += Time.deltaTime;
-            // 일정 시간이 지나거나 몬스터가 죽으면 연결 해제 후 회수 상태로 전환
-            if (pullTimer >= harpoonDuration || enemy == null)
+            HandlePulling();
+        }
+        else if (isReturn && playerObj != null)
+        {
+            HandleReturning();
+        }
+    }
+
+    void HandlePulling()
+    {
+        pullTimer += Time.deltaTime;
+        if (pullTimer >= harpoonDuration || enemy == null)
+        {
+            isPulling = false;
+            isReturn = true;
+            NotifyShark(false);
+        }
+        else
+        {
+            enemy.transform.position = Vector3.MoveTowards(
+                enemy.transform.position,
+                playerObj.transform.position,
+                pullSpeed * Time.deltaTime
+            );
+
+            playerObj.transform.position = Vector3.MoveTowards(
+                playerObj.transform.position,
+                enemy.transform.position,
+                playerPullSpeed * Time.deltaTime
+            );
+
+            hitOffset = Vector3.Lerp(hitOffset, Vector3.zero, 2f * Time.deltaTime);
+            transform.position = enemy.transform.position + hitOffset;
+
+            UpdateTail();
+            if (Vector3.Distance(enemy.transform.position, playerObj.transform.position) < 0.5f)
             {
                 isPulling = false;
                 isReturn = true;
-            }
-            else
-            {
-                // 몬스터를 플레이어 방향으로 이동시킴
-                enemy.transform.position = Vector3.MoveTowards(
-                    enemy.transform.position,
-                    playerObj.transform.position,
-                    pullSpeed * Time.deltaTime
-                );
-
-                // 플레이어도 몬스터 방향으로 약하게 끌어당김
-                playerObj.transform.position = Vector3.MoveTowards(
-                    playerObj.transform.position,
-                    enemy.transform.position,
-                    playerPullSpeed * Time.deltaTime
-                );
-
-                // 점진적으로 hitOffset을 0으로 보간하여, 작살의 위치가 몬스터의 움직임을 따르도록 함
-                hitOffset = Vector3.Lerp(hitOffset, Vector3.zero, 2f * Time.deltaTime);
-                transform.position = enemy.transform.position + hitOffset;
-
-                // 밧줄 업데이트: start는 작살, end는 플레이어
-                Transform[] pullingPoints = new Transform[2];
-                pullingPoints[0] = transform;
-                pullingPoints[1] = playerObj.transform;
-                tail.GetComponent<LineController>().SetUpLine(pullingPoints);
-
-                // 몬스터와 플레이어가 충분히 가까워지면 당기는 상태 종료 후 회수 상태로 전환
-                if (Vector3.Distance(enemy.transform.position, playerObj.transform.position) < 0.5f)
-                {
-                    isPulling = false;
-                    isReturn = true;
-                }
-            }
-        }
-        // 3. 회수 상태: 작살이 플레이어 쪽으로 이동
-        else if (isReturn && playerObj != null)
-        {
-            // 밧줄 업데이트: start는 작살, end는 플레이어
-            Transform[] returnPoints = new Transform[2];
-            returnPoints[0] = transform;
-            returnPoints[1] = playerObj.transform;
-            tail.GetComponent<LineController>().SetUpLine(returnPoints);
-
-            transform.position = Vector3.MoveTowards(transform.position, playerObj.transform.position, returnSpeed * Time.deltaTime);
-
-            HarpoonRotation();
-
-            if (Vector3.Distance(transform.position, playerObj.transform.position) < 0.1f)
-            {
-                _playerAttack.ReloadHarpoon();
-                Destroy(gameObject);
+                NotifyShark(false);
             }
         }
     }
 
-    // 충돌 이벤트 처리 (Trigger 방식)
+    void HandleReturning()
+    {
+        UpdateTail();
+        transform.position = Vector3.MoveTowards(transform.position, playerObj.transform.position, returnSpeed * Time.deltaTime);
+        HarpoonRotation();
+        if (Vector3.Distance(transform.position, playerObj.transform.position) < 0.1f)
+        {
+            _playerAttack.ReloadHarpoon();
+            Destroy(gameObject);
+        }
+    }
+
+    void UpdateTail()
+    {
+        Transform[] returnPoints = new Transform[2];
+        returnPoints[0] = transform;
+        returnPoints[1] = playerObj.transform;
+        tail.GetComponent<LineController>().SetUpLine(returnPoints);
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (isPreparing) return;
+
         if (other.CompareTag("Enemy") && isMoving)
         {
-            StateManager.Instance.CoinPlus();
-            enemy = other.gameObject;
-            isMoving = false;
-            isPulling = true;
-            pullTimer = 0f;  // 타이머 초기화
-            GetComponent<CapsuleCollider2D>().enabled = false;
-
-            // 저장: 충돌 시의 오프셋(작살과 몬스터 사이)
-            hitOffset = transform.position - enemy.transform.position;
-
-            // 밧줄 업데이트: start는 작살, end는 플레이어
-            Transform[] newPoints = new Transform[2];
-            newPoints[0] = transform;
-            newPoints[1] = playerObj.transform;
-            tail.GetComponent<LineController>().SetUpLine(newPoints);
-
-            StartCoroutine(cameraController.ShakeCamera());
-            
-            // 출혈 이펙트 (원하는 경우)
-            Vector3 bloodDirection = -transform.up;
-            Vector3 collisionPoint = other.ClosestPoint(transform.position);
-            Vector3 spawnPos = collisionPoint;
-            float baseAngle = Mathf.Atan2(bloodDirection.y, bloodDirection.x) * Mathf.Rad2Deg;
-            float newAngle = baseAngle - 60f;
-            if (bloodParticlePrefab != null)
-            {
-                Instantiate(bloodParticlePrefab, spawnPos, Quaternion.Euler(0, 0, newAngle));
-            }
+            HandleEnemyHit(other);
         }
-        if (other.CompareTag("Obstacle") && isMoving)
+        else if (other.CompareTag("Obstacle") && isMoving)
         {
             ReturnStart();
         }
-        if (other.CompareTag("Boss") && isMoving)
+        else if (other.CompareTag("Boss") && isMoving)
         {
             GameManager.Instance.DamagedBossHP(2);
             ReturnStart();
         }
     }
 
-    // 충돌 이벤트 처리 (Collision 방식)
+    void HandleEnemyHit(Collider2D other)
+    {
+        StateManager.Instance.CoinPlus();
+        enemy = other.gameObject;
+        isMoving = false;
+        isPulling = true;
+        pullTimer = 0f;
+        GetComponent<CapsuleCollider2D>().enabled = false;
+        hitOffset = transform.position - enemy.transform.position;
+
+        StartCoroutine(cameraController.ShakeCamera());
+        SpawnBloodEffect(other);
+        UpdateTail();
+
+        NotifyShark(true);
+
+        // 🛑 적이 상어라면, Harpoon을 등록 (죽을 때 작살 복귀 가능)
+        SharkMove shark = enemy.GetComponent<SharkMove>();
+        if (shark != null)
+        {
+            shark.SetHarpoon(this);
+        }
+    }
+
+    void NotifyShark(bool isHarpooned)
+    {
+        if (enemy != null)
+        {
+            SharkMove shark = enemy.GetComponent<SharkMove>();
+            if (shark != null)
+            {
+                shark.SetHarpoonedState(isHarpooned, playerObj.transform.position);
+            }
+        }
+    }
+
+    void SpawnBloodEffect(Collider2D other)
+    {
+        Vector3 bloodDirection = -transform.up;
+        Vector3 collisionPoint = other.ClosestPoint(transform.position);
+        Vector3 spawnPos = collisionPoint;
+        float baseAngle = Mathf.Atan2(bloodDirection.y, bloodDirection.x) * Mathf.Rad2Deg;
+        float newAngle = baseAngle - 60f;
+
+        if (bloodParticlePrefab != null)
+        {
+            Instantiate(bloodParticlePrefab, spawnPos, Quaternion.Euler(0, 0, newAngle));
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy") && isMoving)
@@ -202,19 +259,16 @@ public class Harpoon : MonoBehaviour
             pullTimer = 0f;
             GetComponent<CapsuleCollider2D>().enabled = false;
             hitOffset = transform.position - enemy.transform.position;
+            UpdateTail();
 
-            Transform[] newPoints = new Transform[2];
-            newPoints[0] = transform;
-            newPoints[1] = playerObj.transform;
-            tail.GetComponent<LineController>().SetUpLine(newPoints);
+            NotifyShark(true);
         }
-        if (collision.gameObject.CompareTag("Obstacle") && isMoving)
+        else if (collision.gameObject.CompareTag("Obstacle") && isMoving)
         {
             ReturnStart();
         }
     }
 
-    // 작살 회전 업데이트: 플레이어를 향해 회전
     void HarpoonRotation()
     {
         Vector2 direction = transform.position - playerObj.transform.position;
@@ -222,12 +276,30 @@ public class Harpoon : MonoBehaviour
         transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
     }
 
-    // 장애물 충돌 등으로 회수 상태 전환
     void ReturnStart()
     {
         isMoving = false;
         isPulling = false;
         isReturn = true;
         GetComponent<CapsuleCollider2D>().enabled = false;
+        NotifyShark(false);
+    }
+
+    public void ForceReturn()
+    {
+        if (!isReturn) // 이미 돌아오는 중이면 중복 실행 방지
+        {
+            isMoving = false;
+            isPulling = false;
+            isReturn = true; // 🛑 돌아오는 상태로 설정
+            GetComponent<CapsuleCollider2D>().enabled = false;
+
+            // 🛑 Harpoon이 적중한 위치에서 돌아오도록 설정 (사라지지 않음)
+            if (enemy != null)
+            {
+                hitOffset = transform.position - enemy.transform.position;
+                transform.position = enemy.transform.position + hitOffset;
+            }
+        }
     }
 }

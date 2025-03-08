@@ -3,122 +3,223 @@ using System.Collections;
 
 public class SharkMove : MonoBehaviour
 {
-    public Transform target; // 플레이어의 Transform
-    public float speed = 3f; // 기본 이동 속도
-    public float rotationSpeed = 0.5f; // 회전 속도
-    public float collisionMoveDistance = 3f; // 충돌 후 이동 거리
-    public float secondMoveDistance = 1f; // 두 번째 이동 거리
-    public float distanceThreshold = 9f; // 상어와 플레이어 거리 임계값 (예시)
-    public float sharkBoostSpeed = 3f;
-    private bool isReversing = false;
+    public Transform target;
+
+    public float speed = 3f;
+    public float rotationSpeed = 0.5f;
+
+    public float orbitDistance = 10f;
+    public float orbitSpeed = 2f;
+
+    public float chargeInterval = 5f;
+    public float chargeDuration = 1f;
+    public float chargeSpeed = 10f;
+
+    public float recoveryDuration = 0.5f;
+
+    private float orbitAngle = 0f;
+    private float chargeTimer = 0f;
+
+    private Vector2 fleeDirection;
 
     public ParticleSystem bloodParticle;
+
+    private Harpoon attachedHarpoon; // 🛑 현재 박혀 있는 작살 저장
+    private TrailRenderer trailRenderer; // 🛑 Trail Renderer 추가
+
+    private enum SharkState
+    {
+        Orbiting,
+        Charging,
+        Fleeing,
+        Stunned,
+        Dead // 🛑 추가: 죽은 상태
+    }
+
+    private SharkState currentState = SharkState.Orbiting;
 
     void Start()
     {
         if (target == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            target = playerObj.transform;
+        }
 
-            if (playerObj != null)
-            {
-                Transform whaleTransform = playerObj.transform.GetChild(5);
-                if (whaleTransform != null)
-                {
-                    target = whaleTransform;
-                }
-            }
+        // 🛑 하위 오브젝트에서 Trail Renderer 찾기
+        Transform fin = transform.Find("Fin/GameObject"); // Trail Renderer가 있는 오브젝트 경로
+        if (fin != null)
+        {
+            trailRenderer = fin.GetComponent<TrailRenderer>();
         }
     }
 
     void Update()
     {
-        if (!isReversing && target != null)
+        if (currentState == SharkState.Dead) return; // 🛑 죽었으면 아무것도 하지 않음
+
+        switch (currentState)
         {
-            // 플레이어 방향으로 이동
+            case SharkState.Orbiting:
+                OrbitBehavior();
+                break;
+
+            case SharkState.Charging:
+                break;
+
+            case SharkState.Fleeing:
+                break;
+
+            case SharkState.Stunned:
+                break;
+        }
+    }
+
+    private void OrbitBehavior()
+    {
+        if (target == null) return;
+
+        float distance = Vector2.Distance(transform.position, target.position);
+
+        if (distance > orbitDistance)
+        {
             Vector2 direction = (target.position - transform.position).normalized;
-            float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            float angle = Mathf.LerpAngle(transform.eulerAngles.z, targetAngle, rotationSpeed * Time.deltaTime);
-            transform.rotation = Quaternion.Euler(0, 0, angle); // 부드러운 회전 적용
-
-            // 플레이어와의 거리 체크 후 속도 결정
-            float distance = Vector2.Distance(transform.position, target.position);
-            float currentSpeed = (distance > distanceThreshold) ? speed * sharkBoostSpeed : speed;
-
-            transform.position += transform.right * currentSpeed * Time.deltaTime; // 현재 방향 기준 이동
+            MoveAndRotate(direction, speed);
         }
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Obstacle"))
+        else
         {
-            // 충돌 시 270도 회전 후 전진하고, 90도 회전 후 전진
-            StartCoroutine(ReverseAndMove());
+            chargeTimer += Time.deltaTime;
+            if (chargeTimer >= chargeInterval)
+            {
+                chargeTimer = 0f;
+                StartCoroutine(ChargeTowardsPlayer());
+            }
+
+            Vector2 orbitCenter = target.position;
+            orbitAngle += orbitSpeed * Time.deltaTime;
+            Vector2 desiredPosition2D = orbitCenter + new Vector2(Mathf.Cos(orbitAngle), Mathf.Sin(orbitAngle)) * orbitDistance;
+            Vector3 desiredPosition = new Vector3(desiredPosition2D.x, desiredPosition2D.y, transform.position.z);
+            Vector2 moveDirection = desiredPosition2D - new Vector2(transform.position.x, transform.position.y);
+            transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * speed);
+            SmoothRotate(moveDirection);
         }
     }
 
-    private IEnumerator ReverseAndMove()
+    private IEnumerator ChargeTowardsPlayer()
     {
-        isReversing = true;
+        currentState = SharkState.Charging;
 
-        // 270도 회전 (부드럽게 회전)
-        float targetRotation = transform.eulerAngles.z + 270f;
-        float startRotation = transform.eulerAngles.z;
+        Vector2 directionToPlayer = (target.position - transform.position).normalized;
+        float targetAngle = Mathf.Atan2(directionToPlayer.y, directionToPlayer.x) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
+
+        float elapsedRotation = 0f;
+        float rotationTime = 0.5f;
+        Quaternion startRotation = transform.rotation;
+        while (elapsedRotation < rotationTime)
+        {
+            elapsedRotation += Time.deltaTime;
+            transform.rotation = Quaternion.Lerp(startRotation, targetRotation, elapsedRotation / rotationTime);
+            yield return null;
+        }
+
+        float elapsedTime = 0f;
+        while (elapsedTime < chargeDuration)
+        {
+            transform.position += (Vector3)(directionToPlayer * chargeSpeed * Time.deltaTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        currentState = SharkState.Orbiting;
+    }
+
+    public void SetHarpoonedState(bool state, Vector2 playerPos)
+    {
+        if (state)
+        {
+            currentState = SharkState.Fleeing;
+            fleeDirection = (transform.position - (Vector3)playerPos).normalized;
+            StartCoroutine(FleeFromPlayer());
+        }
+        else
+        {
+            currentState = SharkState.Orbiting;
+        }
+    }
+
+    public void SetHarpoon(Harpoon harpoon) // 🛑 작살이 박히면 연결
+    {
+        attachedHarpoon = harpoon;
+    }
+
+    public void SetDeadState()
+    {
+        currentState = SharkState.Dead; // 🛑 죽으면 모든 움직임을 멈춤
+
+        // 🛑 Trail Renderer 끄기
+        if (trailRenderer != null)
+        {
+            trailRenderer.enabled = false;
+        }
+
+        // 🛑 박혀 있던 작살을 즉시 복귀하도록 명령
+        if (attachedHarpoon != null)
+        {
+            attachedHarpoon.ForceReturn();
+        }
+
+        // 🛑 애니메이션 재생 후 삭제
+        GetComponent<Animator>().SetTrigger("Die");
+        StartCoroutine(DestroyAfterAnimation());
+    }
+
+    private IEnumerator FleeFromPlayer()
+    {
+        float fleeTime = 2f;
+        float fleeSpeed = 5f;
         float elapsedTime = 0f;
 
-        // 2초 동안 부드럽게 270도 회전
-        while (elapsedTime < 2f)
+        while (elapsedTime < fleeTime && currentState == SharkState.Fleeing)
         {
-            float currentRotation = Mathf.LerpAngle(startRotation, targetRotation, elapsedTime / 2f);
-            transform.rotation = Quaternion.Euler(0f, 0f, currentRotation);
-            elapsedTime += Time.deltaTime * rotationSpeed;
-            yield return null;
-        }
-        transform.rotation = Quaternion.Euler(0f, 0f, targetRotation);
-
-        // 270도 회전 후 전진
-        Vector3 startPosition = transform.position;
-        elapsedTime = 0f;
-        while (elapsedTime < 1f) // 전진 시간
-        {
-            transform.position = Vector3.Lerp(startPosition, startPosition + transform.right * collisionMoveDistance, elapsedTime / 1f);
+            transform.position += (Vector3)(fleeDirection * fleeSpeed * Time.deltaTime);
+            SmoothRotate(fleeDirection);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        // 90도 회전
-        targetRotation = transform.eulerAngles.z + 90f;
-        startRotation = transform.eulerAngles.z;
-        elapsedTime = 0f;
-
-        // 1초 동안 부드럽게 90도 회전
-        while (elapsedTime < 1f)
-        {
-            float currentRotation = Mathf.LerpAngle(startRotation, targetRotation, elapsedTime / 1f);
-            transform.rotation = Quaternion.Euler(0f, 0f, currentRotation);
-            elapsedTime += Time.deltaTime * rotationSpeed;
-            yield return null;
-        }
-        transform.rotation = Quaternion.Euler(0f, 0f, targetRotation);
-
-        // 90도 회전 후 전진
-        startPosition = transform.position;
-        elapsedTime = 0f;
-        while (elapsedTime < 1f) // 전진 시간
-        {
-            transform.position = Vector3.Lerp(startPosition, startPosition + transform.right * secondMoveDistance, elapsedTime / 1f);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        // 이동이 끝나면 원래 플레이어를 추적하는 상태로 돌아감
-        isReversing = false;
+        currentState = SharkState.Orbiting;
     }
 
-    public void EatWhale()
+    private IEnumerator DestroyAfterAnimation()
     {
-        if(bloodParticle != null)
+        Animator animator = GetComponent<Animator>();
+
+        // 현재 재생 중인 애니메이션의 길이를 가져와 대기
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+
+        Destroy(gameObject); // 애니메이션이 끝나면 몬스터 삭제
+    }
+
+    void MoveAndRotate(Vector2 direction, float moveSpeed)
+    {
+        transform.position += (Vector3)(direction * moveSpeed * Time.deltaTime);
+        SmoothRotate(direction);
+    }
+
+    void SmoothRotate(Vector2 moveDirection)
+    {
+        if (moveDirection != Vector2.zero)
+        {
+            float targetRotAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+            float angle = Mathf.LerpAngle(transform.eulerAngles.z, targetRotAngle, rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
+    }
+
+    public void EatWhale() // 🛑 삭제 안 함
+    {
+        if (bloodParticle != null)
             bloodParticle.Play();
     }
 }
